@@ -97,7 +97,7 @@ shout() {
       if [ "${options##*A}" != "$options" ]; then # arg mode
         shoutargs "$color" "$@"
       else
-        shoutline "$color" "$@" "$reset"
+        shoutline "$color" "$@"
       fi
     else # stream mode
       printf '%s' "$color" >&2

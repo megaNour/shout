@@ -4,29 +4,23 @@ shout is just a POSIX script. Source it, use it. No daemon, no runtime, no...
 
 ## How to use
 
+The following will explain what the `OPT_STRING` is and which values it takes.
+
 ```sh
-# Any argument will display help.
-$ ./shout.sh help
+# Any argument will display help. This avoids printing when sourcing.
+% ./shout.sh help
 ```
 
 ## Examples
 
+These examples are extracted from the tests. The look and feel may vary depending
+on your terminal's theme. So you can just run them (~instant):
+
+The `%` prompts are symbolic of user prompt. The `$` are used in `shout` outputs.
+
 ```sh
-$ . ./shout.sh
-$ shout FA This is a positional arg log.
-# $1: This
-# $2: is
-# $3: a
-# $4: positional
-# $5: arg
-# $6: log
-$ shout F$red This is a red line log.
-# This is a red line log.
-$ echo "This is streamed to stdin and stderr. Thus, you see it twice." | shout F
-# This is streamed to stdin and stderr. Thus, you see it twice.
-# This is streamed to stdin and stderr. Thus, you see it twice.
-$ DEBUG_ENABLED=1 shout $red "If you have this global switch, you don't need Force."
-# If you have this global switch, you don't need to use Force.
+# Runs the tests and output example commands and output specific to your theme.
+./test.sh
 ```
 
 ## Work In Progress
