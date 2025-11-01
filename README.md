@@ -1,6 +1,6 @@
 # shout - a mini POSIX shell-native logging library
 
-shout is just a POSIX script. Source it, use it. No daemon, no runtime, no...
+shout is just a `POSIX` script. Source it, use it. No daemon, no runtime, no...
 
 ## How to use
 
