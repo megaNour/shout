@@ -21,6 +21,7 @@ _CYA="[48;5;6m"
 _WHI="[48;5;7m"
 _GRY="[48;5;8m"
 _DEF="[48;5;15m"
+_BLA="[48;5;16m"
 
 _shoutHelp() {
   cat <<EOF
@@ -58,6 +59,8 @@ OPT_STRING:
 
   $_bol${_yel}h$_res: display this message
 
+  $_bol${_yel}p$_res: display Palestine flag.
+
   $_bol${_yel}r$_res: display 256 colors with their index. (no worries, it's compact)
 
   $_bol${_yel}a$_res: pretty print positional arguments.
@@ -93,6 +96,7 @@ shout() {
   # terminal flags
   [ "${optstring##*h}" != "$optstring" ] && _shoutHelp && return 0
   [ "${optstring##*r}" != "$optstring" ] && _shoutRainbow && return 0
+  [ "${optstring##*p}" != "$optstring" ] && _shoutPalestine && return 0
 
   # parse color or fallback
   color=${optstring##*[fa]}
@@ -141,7 +145,30 @@ _shoutRainbow() {
   printf "%s\n" "$_res"
 }
 
-_redact() { # WIP remove sensitive or noisy output
+_shoutPalestine() {
+  cat <<EOF
+$_BLA$_red◣                                                                               $_res
+$_BLA$_red█◣                                                                              $_res
+$_BLA$_red██◣                                                                             $_res
+$_BLA$_red███◣                                                                            $_res
+$_BLA$_red████◣                                                                           $_res
+$_BLA$_red█████◣                                                                          $_res
+$_DEF$_red██████◣                                                                         $_res
+$_DEF$_red███████◣                                                                        $_res
+$_DEF$_red████████◣                                                                       $_res
+$_DEF$_red████████◤                                                                       $_res
+$_DEF$_red███████◤                                                                        $_res
+$_DEF$_red██████◤                                                                         $_res
+$_GRN$_red█████◤                                                                          $_res
+$_GRN$_red████◤                                                                           $_res
+$_GRN$_red███◤                                                                            $_res
+$_GRN$_red██◤                                                                             $_res
+$_GRN$_red█◤                                                                              $_res
+$_GRN$_red◤                                                                               $_res
+EOF
+}
+
+_shoutRedact() { # WIP remove sensitive or noisy output
   sed 's/--oauth2-bearer [^ ]*/--oauth2-bearer <MY_TOKEN>/gi'
 }
 
