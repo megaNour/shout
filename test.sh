@@ -3,10 +3,12 @@
 . ./shout.sh
 SHOUT_ENABLED=1
 
+tres="[0m"
 tred="[38;5;1m"
 tgrn="[38;5;2m"
 tgry="[38;5;8m"
-tres="[0m"
+tbla="[38;5;16m"
+tRED="[48;5;1m"
 
 assert() {
   actual=$(printf '%s' "$1" | od -ta)
@@ -69,4 +71,8 @@ run "$test" "$expected"
 
 test='printf "%s" "This is streamed to stdin and stderr. Thus, you see it twice." | shout F'
 expected="${tgry}This is streamed to stdin and stderr. Thus, you see it twice.This is streamed to stdin and stderr. Thus, you see it twice.$tres"
+run "$test" "$expected"
+
+test='shout F$RED$bla "Combining colors to make sure you notice the pipe in the previous test."'
+expected="${tRED}${tbla}Combining colors to make sure you notice the pipe in the previous test.$tres"
 run "$test" "$expected"

@@ -11,6 +11,16 @@ cya="[38;5;6m"
 whi="[38;5;7m"
 gry="[38;5;8m"
 def="[38;5;15m"
+bla="[38;5;16m"
+RED="[48;5;1m"
+GRN="[48;5;2m"
+YEL="[48;5;3m"
+BLU="[48;5;4m"
+MAG="[48;5;5m"
+CYA="[48;5;6m"
+WHI="[48;5;7m"
+GRY="[48;5;8m"
+DEF="[48;5;15m"
 
 _shoutHelp() {
   cat <<EOF
@@ -62,7 +72,8 @@ Examples:
 
 Included colors: $gry(you can define and pass your own...)$def
 
-$gry  - \$gry (default for logging) $red  - \$red $grn  - \$grn $yel  - \$yel $blu  - \$blu $mag  - \$mag $cya  - \$cya $whi  - \$whi $def  - \$def
+foregrounds: $gry\$gry (default for logging)$red \$red$grn \$grn$yel \$yel$blu \$blu$mag \$mag$cya \$cya$whi \$whi$def \$def $DEF$bla \$bla$res
+backgrounds: $GRY \$GRY $RED \$RED $GRN$bla \$GRN $YEL \$YEL $BLU \$BLU $MAG \$MAG $CYA \$CYA $WHI \$WHI $DEF \$DEF$res$gry # everything combines$res
 
 Included modifiers:
 
