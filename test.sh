@@ -1,7 +1,7 @@
 #!/bin/sh
 
 . ./shout.sh
-DEBUG_ENABLED=1
+SHOUT_ENABLED=1
 
 tred=$(tput setaf 1)
 tgreen=$(tput setaf 2)
@@ -48,10 +48,10 @@ test='shout "$red" "This is a red line log. You can change the color."'
 expected=$(printf "%s" "${tred}This is a red line log. You can change the color.$reset")
 run "$test" "$expected"
 
-unset DEBUG_ENABLED
-printf '%s\n' "%% unset DEBUG_ENABLED"
-test='shout "F$red" "The Force switch bypasses DEBUG_ENABLED. Switches go before any color."'
-expected=$(printf "%s" "${red}The Force switch bypasses DEBUG_ENABLED. Switches go before any color.$reset")
+unset SHOUT_ENABLED
+printf '%s\n' "%% unset SHOUT_ENABLED"
+test='shout "F$red" "The Force switch bypasses SHOUT_ENABLED. Switches go before any color."'
+expected=$(printf "%s" "${red}The Force switch bypasses SHOUT_ENABLED. Switches go before any color.$reset")
 run "$test" "$expected"
 
 test='shout FA This is a positional arg log using the A switch.'
@@ -67,6 +67,7 @@ $grey\$9: A$reset
 $grey\$10: switch.$reset"
 run "$test" "$expected"
 
-test='printf '%s' "This is streamed to stdin and stderr. Thus, you see it twice." | shout F'
+streamed="This is streamed to stdin and stderr. Thus, you see it twice."
+test='printf "%s" "$streamed" | shout F'
 expected="${tgrey}This is streamed to stdin and stderr. Thus, you see it twice.This is streamed to stdin and stderr. Thus, you see it twice.$reset"
 run "$test" "$expected"

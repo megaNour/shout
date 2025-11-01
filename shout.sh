@@ -12,7 +12,7 @@ default=$(tput setaf 15)
 bold=$(tput bold)
 reset=$(tput sgr 0)
 
-shoutHelp() {
+_shoutHelp() {
   cat <<EOF
 $bold                         $red       :
 $green             .          $red       t#,    :
@@ -41,23 +41,23 @@ Usage:
   command | shout OPT_STRING   ${grey}# stream mode${reset}
 
 Environments:
-  ${yellow}DEBUG_ENABLED${reset} - global logging switch. Can be bypassed with ${yellow}F${reset} opt.
+  ${yellow}SHOUT_ENABLED${reset} - global logging switch. Can be bypassed with ${yellow}F${reset} opt.
 
 OPT_STRING:
   Must come with the form: "${yellow}[FA][color]${reset}" where:
 
   ${yellow}A${reset}: pretty prints positional arguments. Only work in ${bold}line-mode${reset}
 
-  ${yellow}F${reset}: force prints to stderr (i.e. bypass ${yellow}DEBUG_ENABLED${reset})
+  ${yellow}F${reset}: force prints to stderr (i.e. bypass ${yellow}SHOUT_ENABLED${reset})
 
 Supported log modes:
   - Single line: prints "\$@" to stderr after shifting the options string.
   - Stream     : forwards stdin to stdout and tees a colorized copy to stderr.
 
 Examples:
-  ${grey}# This prints red logs in red to stderr even if DEBUG_ENABLED is off${reset}
+  ${grey}# This prints red logs in red to stderr even if SHOUT_ENABLED is off${reset}
   shout "F.\$red"
-  ${grey}# This prints in grey to stderr even if DEBUG_ENABLED is off and forwards to myNextProcess${reset}
+  ${grey}# This prints in grey to stderr even if SHOUT_ENABLED is off and forwards to myNextProcess${reset}
   echo "streamed text" | shout F | myNextProcess
 
 Included colors:
@@ -91,13 +91,12 @@ shout() {
   # parse mode flags
   [ "${options##*F}" != "$options" ] && force=1
 
-  if [ "$DEBUG_ENABLED" ] || [ -n "$force" ]; then
-    # single line mode
-    if [ -t 0 ]; then
-      if [ "${options##*A}" != "$options" ]; then # arg mode
-        shoutargs "$color" "$@"
+  if [ "$SHOUT_ENABLED" ] || [ -n "$force" ]; then
+    if [ -t 0 ]; then                             # interactive mode
+      if [ "${options##*A}" != "$options" ]; then # args mode
+        _shoutargs "$color" "$@"
       else
-        shoutline "$color" "$@"
+        _shoutline "$color" "$@" # line mode
       fi
     else # stream mode
       printf '%s' "$color" >&2
@@ -107,28 +106,24 @@ shout() {
   fi
 }
 
-# log positional arguments
-shoutargs() {
+_shoutargs() { # log positional arguments
   color=${1:-$grey}
   shift
   i=0
   for arg in "$@"; do
     i=$((i + 1))
-    shoutline "$color" "\$$i: $arg"
+    _shoutline "$color" "\$$i: $arg"
   done
 }
 
-# log positional arguments inline
-shoutline() {
+_shoutline() { # log positional arguments inline
   color=$1
   shift
   printf "%s%s%s\n" "${color}" "$*" "${reset}" >&2
 }
 
-# remove sensitive or noisy output
-redact() {
+_redact() { # remove sensitive or noisy output
   sed 's/--oauth2-bearer [^ ]*/--oauth2-bearer <MY_TOKEN>/gi'
 }
 
-# Display help only if any argument is passed.
-${1:+shoutHelp "$@"}
+${1:+_shoutHelp "$@"}
