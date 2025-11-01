@@ -92,7 +92,7 @@ shout() {
 
   # terminal flags
   [ "${optstring##*h}" != "$optstring" ] && _shoutHelp && return 0
-  [ "${optstring##*r}" != "$optstring" ] && _rainbow && return 0
+  [ "${optstring##*r}" != "$optstring" ] && _shoutRainbow && return 0
 
   # parse color or fallback
   color=${optstring##*[fa]}
@@ -104,9 +104,9 @@ shout() {
   if [ "$SHOUT_ENABLED" ] || [ -n "$force" ]; then
     if [ -t 0 ]; then                                 # interactive mode
       if [ "${optstring##*a}" != "$optstring" ]; then # args mode
-        _shoutargs "$color" "$@"
+        _shoutArgs "$color" "$@"
       else
-        _shoutline "$color" "$@" # line mode
+        _shoutLine "$color" "$@" # line mode
       fi
     else # stream mode
       printf '%s' "$color" >&2
@@ -116,23 +116,23 @@ shout() {
   fi
 }
 
-_shoutargs() { # log positional arguments
+_shoutArgs() { # log positional arguments
   color=${1:-$_gry}
   shift
   i=0
   for arg in "$@"; do
     i=$((i + 1))
-    _shoutline "$color" "\$$i: $arg"
+    _shoutLine "$color" "\$$i: $arg"
   done
 }
 
-_shoutline() { # log positional arguments inline
+_shoutLine() { # log positional arguments inline
   color=$1
   shift
   printf "%s%s%s\n" "${color}" "$*" "${_res}" >&2
 }
 
-_rainbow() {
+_shoutRainbow() {
   i=0
   while [ "$i" -lt 256 ]; do
     printf '%s ' "[38;5;${i}m$i${_res}"
