@@ -1,107 +1,106 @@
-#!/usr/bin/env dash
+#!/bin/sh
 
-res="[0m"
-bol="[1m"
-red="[38;5;1m"
-grn="[38;5;2m"
-yel="[38;5;3m"
-blu="[38;5;4m"
-mag="[38;5;5m"
-cya="[38;5;6m"
-whi="[38;5;7m"
-gry="[38;5;8m"
-def="[38;5;15m"
-bla="[38;5;16m"
-RED="[48;5;1m"
-GRN="[48;5;2m"
-YEL="[48;5;3m"
-BLU="[48;5;4m"
-MAG="[48;5;5m"
-CYA="[48;5;6m"
-WHI="[48;5;7m"
-GRY="[48;5;8m"
-DEF="[48;5;15m"
+_res="[0m"
+_bol="[1m"
+_red="[38;5;1m"
+_grn="[38;5;2m"
+_yel="[38;5;3m"
+_blu="[38;5;4m"
+_mag="[38;5;5m"
+_cya="[38;5;6m"
+_whi="[38;5;7m"
+_gry="[38;5;8m"
+_def="[38;5;15m"
+_bla="[38;5;16m"
+_RED="[48;5;1m"
+_GRN="[48;5;2m"
+_YEL="[48;5;3m"
+_BLU="[48;5;4m"
+_MAG="[48;5;5m"
+_CYA="[48;5;6m"
+_WHI="[48;5;7m"
+_GRY="[48;5;8m"
+_DEF="[48;5;15m"
 
 _shoutHelp() {
   cat <<EOF
-$bol                        $red        :
-$grn             .          $red       t#,    :
-$grn            ;W.    .    $red      ;##W.   Ef
-$grn           f#Ef    Dt   $red     :#L:WE   E#t  GEEEEEEEL
-$grn         .E#f  ai  E#i  $red    .KG  ,#D  E#t  ,;;L#K;;.
-$grn        iWW;  E#t  E#t  $red    EE    ;#f E#t     t#E
-$grn       L##LffiE#t  E#t  $red   f#.     t#iE#t  i  t#E
-$grn      tLLG##L E########f$red  .:#G     GK E#t .#j t#E
-$grn        ,W#i  E#j..K#j..$red    ;#L   LW. E#t ;#L t#E
-$grn       j#E.   E#t  E#t  $red     t#f f#:  E#tf#E: t#E
-$grn     .D#j     E#t  E#t  $red      f#D#;   E###f   t#E
-$grn    ,WK,      f#t  f#t  $red       G#t    E#K,    t#E
-$grn    EG.        ii   ii  $red        t     EL       fE
-$grn    ,                   $red              :         :
+$_bol                        $_red        :
+$_grn             .          $_red       t#,    :
+$_grn            ;W.    .    $_red      ;##W.   Ef
+$_grn           f#Ef    Dt   $_red     :#L:WE   E#t  GEEEEEEEL
+$_grn         .E#f  ai  E#i  $_red    .KG  ,#D  E#t  ,;;L#K;;.
+$_grn        iWW;  E#t  E#t  $_red    EE    ;#f E#t     t#E
+$_grn       L##LffiE#t  E#t  $_red   f#.     t#iE#t  i  t#E
+$_grn      tLLG##L E########f$_red  .:#G     GK E#t .#j t#E
+$_grn        ,W#i  E#j..K#j..$_red    ;#L   LW. E#t ;#L t#E
+$_grn       j#E.   E#t  E#t  $_red     t#f f#:  E#tf#E: t#E
+$_grn     .D#j     E#t  E#t  $_red      f#D#;   E###f   t#E
+$_grn    ,WK,      f#t  f#t  $_red       G#t    E#K,    t#E
+$_grn    EG.        ii   ii  $_red        t     EL       fE
+$_grn    ,                   $_red              :         :
 
-                      ${def}v0.1.0${res}
+                      ${_def}v0.1.0$_res
 
 Description:
-  multi-modal logger taking options and colors.
+  multi-modal logger taking optstring and colors.
 
 Usage:
-  ./shout.sh [ANYTHING]        $gry# print this message$res
-  . ./shout.sh                 $gry# source the lib$res
-  shout OPT_STRING [ARGUMENTS] $gry# line mode$res
-  command | shout OPT_STRING   $gry# stream mode$res
+  ./shout.sh [ANYTHING]        $_gry# print this message$_res
+  . ./shout.sh                 $_gry# source the lib$_res
+  shout OPT_STRING [ARGUMENTS] $_gry# line mode$_res
+  command | shout OPT_STRING   $_gry# stream mode$_res
 
 Environments:
-  ${yel}SHOUT_ENABLED${res} - global logging switch. Can be bypassed with ${yel}f$res opt.
+  ${_yel}SHOUT_ENABLED$_res - global logging switch. Can be bypassed with ${_yel}f$_res opt.
 
 OPT_STRING:
-  Must come with the form: "${yel}[switches][colors]$res" where switches are: $gry# see predefined colors at the bottom
+  Must come with the form: "${_yel}[switches][colors]$_res" where switches are: $_gry# see predefined colors at the bottom
 
-  ${yel}h$res: display this message
+  ${_yel}h$_res: display this message
 
-  ${yel}a$res: pretty prints positional arguments. Only work in ${bol}line-mode$res
+  ${_yel}a$_res: pretty prints positional arguments. Only work in ${_bol}line-mode$_res
 
-  ${yel}f$res: force prints to stderr (i.e. bypass ${yel}SHOUT_ENABLED$res)
+  ${_yel}f$_res: force prints to stderr (i.e. bypass ${_yel}SHOUT_ENABLED$_res)
 
 Supported log modes:
-  - Single line: prints "\$@" to stderr after shifting the options string.
+  - Single line: prints "\$@" to stderr after shifting the optstring string.
   - Stream     : forwards stdin to stdout and tees a colorized copy to stderr.
 
 Examples:
-  ${gry}# This prints red logs in red to stderr even if SHOUT_ENABLED is off${res}
-  shout "f.\$red"
-  ${gry}# This prints in grey to stderr even if SHOUT_ENABLED is off and forwards to myNextProcess$res
+  ${_gry}# This prints red logs in red to stderr even if SHOUT_ENABLED is off${_res}
+  shout "f.\$_red"
+  ${_gry}# This prints in grey to stderr even if SHOUT_ENABLED is off and forwards to myNextProcess$_res
   echo "streamed text" | shout f | myNextProcess
 
-Included colors: $gry(you can define and pass your own...)$def
+Included colors: $_gry(you can define and pass your own...)$_def
 
-foregrounds: $gry\$gry (default for logging)$red \$red$grn \$grn$yel \$yel$blu \$blu$mag \$mag$cya \$cya$whi \$whi$def \$def $DEF$bla \$bla$res
-backgrounds: $GRY \$GRY $RED \$RED $GRN$bla \$GRN $YEL \$YEL $BLU \$BLU $MAG \$MAG $CYA \$CYA $WHI \$WHI $DEF \$DEF$res$gry # everything combines$res
+foregrounds: $_gry\$_gry (default for logging)$_red \$_red$_grn \$_grn$_yel \$_yel$_blu \$_blu$_mag \$_mag$_cya \$cya$_whi \$_whi$_def \$_def $_def$_bla \$bla$_res
+backgrounds: $_GRY \$_GRY $_RED \$_RED $_GRN$_bla \$_GRN $_YEL \$_YEL $_BLU \$_BLU $_MAG \$_MAG $_CYA \$CYA $_WHI \$_WHI $_DEF \$_DEF$_res$_gry # everything combines$_res
 
 Included modifiers:
 
-$bol  - \$bol$gry bold combines with any color.
-$res  - \$res$gry resets everything.$res
+$_bol  - \$_bol$_gry bold combines with any color.
+$_res  - \$_res$_gry resets everything.$_res
 EOF
 }
 
 shout() {
-  local options force color
-  options=$1
+  optstring=$1
   shift
 
   # terminal flags
-  [ "${options##*h}" != "$options" ] && _shoutHelp && return 0
+  [ "${optstring##*h}" != "$optstring" ] && _shoutHelp && return 0
 
   # parse color or fallback
-  color=${options##*[fa]}
-  : "${color:=$gry}"
+  color=${optstring##*[fa]}
+  : "${color:=$_gry}"
 
   # parse mode flags
-  [ "${options##*f}" != "$options" ] && force=1
+  [ "${optstring##*f}" != "$optstring" ] && force=1
 
   if [ "$SHOUT_ENABLED" ] || [ -n "$force" ]; then
-    if [ -t 0 ]; then                             # interactive mode
-      if [ "${options##*a}" != "$options" ]; then # args mode
+    if [ -t 0 ]; then                                 # interactive mode
+      if [ "${optstring##*a}" != "$optstring" ]; then # args mode
         _shoutargs "$color" "$@"
       else
         _shoutline "$color" "$@" # line mode
@@ -109,13 +108,13 @@ shout() {
     else # stream mode
       printf '%s' "$color" >&2
       cat | tee /dev/stderr
-      printf '%s' "$res" >&2
+      printf '%s' "$_res" >&2
     fi
   fi
 }
 
 _shoutargs() { # log positional arguments
-  color=${1:-$gry}
+  color=${1:-$_gry}
   shift
   i=0
   for arg in "$@"; do
@@ -127,10 +126,10 @@ _shoutargs() { # log positional arguments
 _shoutline() { # log positional arguments inline
   color=$1
   shift
-  printf "%s%s%s\n" "${color}" "$*" "${res}" >&2
+  printf "%s%s%s\n" "${color}" "$*" "${_res}" >&2
 }
 
-_redact() { # remove sensitive or noisy output
+_redact() { # WIP remove sensitive or noisy output
   sed 's/--oauth2-bearer [^ ]*/--oauth2-bearer <MY_TOKEN>/gi'
 }
 
