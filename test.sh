@@ -3,19 +3,19 @@
 . ./shout.sh
 SHOUT_ENABLED=1
 
-tred=$(tput setaf 1)
-tgreen=$(tput setaf 2)
-tgrey=$(tput setaf 8)
-treset=$(tput sgr 0)
+tred="[38;5;1m"
+tgrn="[38;5;2m"
+tgry="[38;5;8m"
+tres="[0m"
 
 assert() {
   actual=$(printf '%s' "$1" | od -ta)
   expected=$(printf '%s' "$2" | od -ta)
   if [ "$actual" = "$expected" ]; then
-    printf "%s%s%s\n" "$tgreen" "Test passed!" "$treset" >&2
+    printf "%s%s%s\n" "$tgrn" "Test passed!" "$tres" >&2
   else
     {
-      printf "%s%s%s\n" "$tred" "Test failed!" "$treset"
+      printf "%s%s%s\n" "$tred" "Test failed!" "$tres"
       printf "\nExpected:\n"
       cat <<EOF
 $expected
@@ -41,33 +41,32 @@ run() {
 }
 
 test='shout "" "This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING."'
-expected=$(printf "%s" "${tgrey}This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING.$reset")
+expected=$(printf "%s" "${tgry}This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING.$res")
 run "$test" "$expected"
 
 test='shout "$red" "This is a red line log. You can change the color."'
-expected=$(printf "%s" "${tred}This is a red line log. You can change the color.$reset")
+expected=$(printf "%s" "${tred}This is a red line log. You can change the color.$res")
 run "$test" "$expected"
 
 unset SHOUT_ENABLED
 printf '%s\n' "%% unset SHOUT_ENABLED"
 test='shout "F$red" "The Force switch bypasses SHOUT_ENABLED. Switches go before any color."'
-expected=$(printf "%s" "${red}The Force switch bypasses SHOUT_ENABLED. Switches go before any color.$reset")
+expected=$(printf "%s" "${red}The Force switch bypasses SHOUT_ENABLED. Switches go before any color.$res")
 run "$test" "$expected"
 
 test='shout FA This is a positional arg log using the A switch.'
-expected="$grey\$1: This$reset
-$grey\$2: is$reset
-$grey\$3: a$reset
-$grey\$4: positional$reset
-$grey\$5: arg$reset
-$grey\$6: log$reset
-$grey\$7: using$reset
-$grey\$8: the$reset
-$grey\$9: A$reset
-$grey\$10: switch.$reset"
+expected="$tgry\$1: This$tres
+$tgry\$2: is$tres
+$tgry\$3: a$tres
+$tgry\$4: positional$tres
+$tgry\$5: arg$tres
+$tgry\$6: log$tres
+$tgry\$7: using$tres
+$tgry\$8: the$tres
+$tgry\$9: A$tres
+$tgry\$10: switch.$tres"
 run "$test" "$expected"
 
-streamed="This is streamed to stdin and stderr. Thus, you see it twice."
-test='printf "%s" "$streamed" | shout F'
-expected="${tgrey}This is streamed to stdin and stderr. Thus, you see it twice.This is streamed to stdin and stderr. Thus, you see it twice.$reset"
+test='printf "%s" "This is streamed to stdin and stderr. Thus, you see it twice." | shout F'
+expected="${tgry}This is streamed to stdin and stderr. Thus, you see it twice.This is streamed to stdin and stderr. Thus, you see it twice.$tres"
 run "$test" "$expected"

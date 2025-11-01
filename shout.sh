@@ -1,81 +1,73 @@
 #!/usr/bin/env dash
 
-red=$(tput setaf 1)
-green=$(tput setaf 2)
-yellow=$(tput setaf 3)
-blue=$(tput setaf 4)
-magenta=$(tput setaf 5)
-cyan=$(tput setaf 6)
-white=$(tput setaf 7)
-grey=$(tput setaf 8)
-default=$(tput setaf 15)
-bold=$(tput bold)
-reset=$(tput sgr 0)
+res="[0m"
+bol="[1m"
+red="[38;5;1m"
+grn="[38;5;2m"
+yel="[38;5;3m"
+blu="[38;5;4m"
+mag="[38;5;5m"
+cya="[38;5;6m"
+whi="[38;5;7m"
+gry="[38;5;8m"
+def="[38;5;15m"
 
 _shoutHelp() {
   cat <<EOF
-$bold                         $red       :
-$green             .          $red       t#,    :
-$green            ;W.    .    $red      ;##W.   Ef
-$green           f#Ef    Dt   $red     :#L:WE   E#t  GEEEEEEEL
-$green         .E#f  ai  E#i  $red    .KG  ,#D  E#t  ,;;L#K;;.
-$green        iWW;  E#t  E#t  $red    EE    ;#f E#t     t#E
-$green       L##LffiE#t  E#t  $red   f#.     t#iE#t  i  t#E
-$green      tLLG##L E########f$red  .:#G     GK E#t .#j t#E
-$green        ,W#i  E#j..K#j..$red    ;#L   LW. E#t ;#L t#E
-$green       j#E.   E#t  E#t  $red     t#f f#:  E#tf#E: t#E
-$green     .D#j     E#t  E#t  $red      f#D#;   E###f   t#E
-$green    ,WK,      f#t  f#t  $red       G#t    E#K,    t#E
-$green    EG.        ii   ii  $red        t     EL       fE
-$green    ,                   $red              :         :
+$bol                        $red        :
+$grn             .          $red       t#,    :
+$grn            ;W.    .    $red      ;##W.   Ef
+$grn           f#Ef    Dt   $red     :#L:WE   E#t  GEEEEEEEL
+$grn         .E#f  ai  E#i  $red    .KG  ,#D  E#t  ,;;L#K;;.
+$grn        iWW;  E#t  E#t  $red    EE    ;#f E#t     t#E
+$grn       L##LffiE#t  E#t  $red   f#.     t#iE#t  i  t#E
+$grn      tLLG##L E########f$red  .:#G     GK E#t .#j t#E
+$grn        ,W#i  E#j..K#j..$red    ;#L   LW. E#t ;#L t#E
+$grn       j#E.   E#t  E#t  $red     t#f f#:  E#tf#E: t#E
+$grn     .D#j     E#t  E#t  $red      f#D#;   E###f   t#E
+$grn    ,WK,      f#t  f#t  $red       G#t    E#K,    t#E
+$grn    EG.        ii   ii  $red        t     EL       fE
+$grn    ,                   $red              :         :
 
-                      ${default}v0.1.0${reset}
+                      ${def}v0.1.0${res}
 
 Description:
   multi-modal logger taking options and colors.
 
 Usage:
-  ./shout.sh [ANYTHING]        ${grey}# print this message${reset}
-  . ./shout.sh                 ${grey}# source the lib${reset}
-  shout OPT_STRING [ARGUMENTS] ${grey}# line mode${reset}
-  command | shout OPT_STRING   ${grey}# stream mode${reset}
+  ./shout.sh [ANYTHING]        $gry# print this message$res
+  . ./shout.sh                 $gry# source the lib$res
+  shout OPT_STRING [ARGUMENTS] $gry# line mode$res
+  command | shout OPT_STRING   $gry# stream mode$res
 
 Environments:
-  ${yellow}SHOUT_ENABLED${reset} - global logging switch. Can be bypassed with ${yellow}F${reset} opt.
+  ${yel}SHOUT_ENABLED${res} - global logging switch. Can be bypassed with ${yel}F$res opt.
 
 OPT_STRING:
-  Must come with the form: "${yellow}[FA][color]${reset}" where:
+  Must come with the form: "${yel}[FA][color]$res" where:
 
-  ${yellow}A${reset}: pretty prints positional arguments. Only work in ${bold}line-mode${reset}
+  ${yel}A$res: pretty prints positional arguments. Only work in ${bol}line-mode$res
 
-  ${yellow}F${reset}: force prints to stderr (i.e. bypass ${yellow}SHOUT_ENABLED${reset})
+  ${yel}F$res: force prints to stderr (i.e. bypass ${yel}SHOUT_ENABLED$res)
 
 Supported log modes:
   - Single line: prints "\$@" to stderr after shifting the options string.
   - Stream     : forwards stdin to stdout and tees a colorized copy to stderr.
 
 Examples:
-  ${grey}# This prints red logs in red to stderr even if SHOUT_ENABLED is off${reset}
+  ${gry}# This prints red logs in red to stderr even if SHOUT_ENABLED is off${res}
   shout "F.\$red"
-  ${grey}# This prints in grey to stderr even if SHOUT_ENABLED is off and forwards to myNextProcess${reset}
+  ${gry}# This prints in grey to stderr even if SHOUT_ENABLED is off and forwards to myNextProcess$res
   echo "streamed text" | shout F | myNextProcess
 
-Included colors:
+Included colors: $gry(you can define and pass your own...)$def
 
-${grey}  - \$grey (default)
-${red}  - \$red
-${green}  - \$green
-${yellow}  - \$yellow
-${blue}  - \$blue
-${magenta}  - \$magenta
-${cyan}  - \$cyan
-${white}  - \$white
-${default}  - \$default${reset}
+$gry  - \$gry (default for logging) $red  - \$red $grn  - \$grn $yel  - \$yel $blu  - \$blu $mag  - \$mag $cya  - \$cya $whi  - \$whi $def  - \$def
 
 Included modifiers:
 
-${bold}  - \$bold combines with any of them.
-${reset}  - \$reset resets everything.
+$bol  - \$bol$gry bold combines with any color.
+$res  - \$res$gry resets everything.$res
 EOF
 }
 
@@ -86,7 +78,7 @@ shout() {
 
   # parse color or fallback
   color=${options##*[FA]}
-  : "${color:=$grey}"
+  : "${color:=$gry}"
 
   # parse mode flags
   [ "${options##*F}" != "$options" ] && force=1
@@ -101,13 +93,13 @@ shout() {
     else # stream mode
       printf '%s' "$color" >&2
       cat | tee /dev/stderr
-      printf '%s' "$reset" >&2
+      printf '%s' "$res" >&2
     fi
   fi
 }
 
 _shoutargs() { # log positional arguments
-  color=${1:-$grey}
+  color=${1:-$gry}
   shift
   i=0
   for arg in "$@"; do
@@ -119,7 +111,7 @@ _shoutargs() { # log positional arguments
 _shoutline() { # log positional arguments inline
   color=$1
   shift
-  printf "%s%s%s\n" "${color}" "$*" "${reset}" >&2
+  printf "%s%s%s\n" "${color}" "$*" "${res}" >&2
 }
 
 _redact() { # remove sensitive or noisy output
