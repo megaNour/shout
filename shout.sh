@@ -62,6 +62,8 @@ OPT_STRING:
 
   ${_yel}f$_res: force prints to stderr (i.e. bypass ${_yel}SHOUT_ENABLED$_res)
 
+  ${_yel}r$_res: display 256 colors with their index. (no worries, it's compact)
+
 Supported log modes:
   - Single line: prints "\$@" to stderr after shifting the optstring string.
   - Stream     : forwards stdin to stdout and tees a colorized copy to stderr.
@@ -90,6 +92,7 @@ shout() {
 
   # terminal flags
   [ "${optstring##*h}" != "$optstring" ] && _shoutHelp && return 0
+  [ "${optstring##*r}" != "$optstring" ] && _rainbow && return 0
 
   # parse color or fallback
   color=${optstring##*[fa]}
@@ -127,6 +130,15 @@ _shoutline() { # log positional arguments inline
   color=$1
   shift
   printf "%s%s%s\n" "${color}" "$*" "${_res}" >&2
+}
+
+_rainbow() {
+  i=0
+  while [ "$i" -lt 256 ]; do
+    printf '%s ' "[38;5;${i}m$i${_res}"
+    i=$((i + 1))
+  done
+  printf "%s\n" "$_res"
 }
 
 _redact() { # WIP remove sensitive or noisy output
