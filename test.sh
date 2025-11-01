@@ -52,11 +52,11 @@ run "$test" "$expected"
 
 unset SHOUT_ENABLED
 printf '%s\n' "%% unset SHOUT_ENABLED"
-test='shout "F$red" "The Force switch bypasses SHOUT_ENABLED. Switches go before any color."'
-expected=$(printf "%s" "${red}The Force switch bypasses SHOUT_ENABLED. Switches go before any color.$res")
+test='shout "f$red" "The force switch bypasses SHOUT_ENABLED. Switches go before any color."'
+expected=$(printf "%s" "${red}The force switch bypasses SHOUT_ENABLED. Switches go before any color.$res")
 run "$test" "$expected"
 
-test='shout FA This is a positional arg log using the A switch.'
+test='shout fa This is a positional arg log using the \"a\" switch.'
 expected="$tgry\$1: This$tres
 $tgry\$2: is$tres
 $tgry\$3: a$tres
@@ -65,14 +65,14 @@ $tgry\$5: arg$tres
 $tgry\$6: log$tres
 $tgry\$7: using$tres
 $tgry\$8: the$tres
-$tgry\$9: A$tres
+$tgry\$9: \"a\"$tres
 $tgry\$10: switch.$tres"
 run "$test" "$expected"
 
-test='printf "%s" "This is streamed to stdin and stderr. Thus, you see it twice." | shout F'
+test='printf "%s" "This is streamed to stdin and stderr. Thus, you see it twice." | shout f'
 expected="${tgry}This is streamed to stdin and stderr. Thus, you see it twice.This is streamed to stdin and stderr. Thus, you see it twice.$tres"
 run "$test" "$expected"
 
-test='shout F$RED$bla "Combining colors to make sure you notice the pipe in the previous test."'
+test='shout f$RED$bla "Combining colors to make sure you notice the pipe in the previous test."'
 expected="${tRED}${tbla}Combining colors to make sure you notice the pipe in the previous test.$tres"
 run "$test" "$expected"

@@ -51,14 +51,16 @@ Usage:
   command | shout OPT_STRING   $gry# stream mode$res
 
 Environments:
-  ${yel}SHOUT_ENABLED${res} - global logging switch. Can be bypassed with ${yel}F$res opt.
+  ${yel}SHOUT_ENABLED${res} - global logging switch. Can be bypassed with ${yel}f$res opt.
 
 OPT_STRING:
-  Must come with the form: "${yel}[FA][color]$res" where:
+  Must come with the form: "${yel}[switches][colors]$res" where switches are: $gry# see predefined colors at the bottom
 
-  ${yel}A$res: pretty prints positional arguments. Only work in ${bol}line-mode$res
+  ${yel}h$res: display this message
 
-  ${yel}F$res: force prints to stderr (i.e. bypass ${yel}SHOUT_ENABLED$res)
+  ${yel}a$res: pretty prints positional arguments. Only work in ${bol}line-mode$res
+
+  ${yel}f$res: force prints to stderr (i.e. bypass ${yel}SHOUT_ENABLED$res)
 
 Supported log modes:
   - Single line: prints "\$@" to stderr after shifting the options string.
@@ -66,9 +68,9 @@ Supported log modes:
 
 Examples:
   ${gry}# This prints red logs in red to stderr even if SHOUT_ENABLED is off${res}
-  shout "F.\$red"
+  shout "f.\$red"
   ${gry}# This prints in grey to stderr even if SHOUT_ENABLED is off and forwards to myNextProcess$res
-  echo "streamed text" | shout F | myNextProcess
+  echo "streamed text" | shout f | myNextProcess
 
 Included colors: $gry(you can define and pass your own...)$def
 
@@ -87,16 +89,19 @@ shout() {
   options=$1
   shift
 
+  # terminal flags
+  [ "${options##*h}" != "$options" ] && _shoutHelp && return 0
+
   # parse color or fallback
-  color=${options##*[FA]}
+  color=${options##*[fa]}
   : "${color:=$gry}"
 
   # parse mode flags
-  [ "${options##*F}" != "$options" ] && force=1
+  [ "${options##*f}" != "$options" ] && force=1
 
   if [ "$SHOUT_ENABLED" ] || [ -n "$force" ]; then
     if [ -t 0 ]; then                             # interactive mode
-      if [ "${options##*A}" != "$options" ]; then # args mode
+      if [ "${options##*a}" != "$options" ]; then # args mode
         _shoutargs "$color" "$@"
       else
         _shoutline "$color" "$@" # line mode
