@@ -172,4 +172,4 @@ $_GRN$_red◤                                                                   
 EOF
 }
 
-${1:+_shoutHelp "$@"}
+${1:+_shoutHelp}
