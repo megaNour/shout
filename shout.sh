@@ -1,7 +1,9 @@
 #!/bin/sh
 
-_res="[0m"
-_bol="[1m"
+_res="[0m" # reset all
+_bol="[1m" # bold
+
+# foregrounds
 _red="[38;5;1m"
 _grn="[38;5;2m"
 _yel="[38;5;3m"
@@ -12,6 +14,8 @@ _whi="[38;5;7m"
 _gry="[38;5;8m"
 _def="[38;5;15m"
 _bla="[38;5;16m"
+
+# backgrounds
 _RED="[48;5;1m"
 _GRN="[48;5;2m"
 _YEL="[48;5;3m"
@@ -102,12 +106,12 @@ shout() {
   color=${optstring##*[fa]}
   : "${color:=$_gry}"
 
-  # parse mode flags
+  # main switches logic starts here
   [ "${optstring##*f}" != "$optstring" ] && force=1
 
   if [ "$SHOUT_ENABLED" ] || [ -n "$force" ]; then
     if [ -t 0 ]; then                                 # interactive mode
-      if [ "${optstring##*a}" != "$optstring" ]; then # args mode
+      if [ "${optstring##*a}" != "$optstring" ]; then # args switch
         _shoutArgs "$color" "$@"
       else
         _shoutLine "$color" "$@" # line mode
@@ -120,7 +124,7 @@ shout() {
   fi
 }
 
-_shoutArgs() { # log positional arguments
+_shoutArgs() { # log positional arguments indexed
   color=${1:-$_gry}
   shift
   i=0

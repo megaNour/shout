@@ -1,14 +1,16 @@
-# shout - a mini POSIX shell-native logging library
+# Shout - A Mini POSIX Shell-Native Logging Library
 
 shout is just a `POSIX` script. Source it, use it. No daemon, no runtime, no...
 
-## How to use
+## How to Use
 
 The following will explain what the `OPT_STRING` is and which values it takes.
 
 ```sh
-# Any argument will display help. This avoids printing when sourcing.
-% ./shout.sh help
+% ./shout.sh help # Any argument will display help. This avoids printing when sourcing.
+% . ./shout.sh # Source it.
+% shout h # The `h` switch also displays help.
+# Now! Just go and read it already!
 ```
 
 ## Examples
@@ -19,8 +21,7 @@ on your terminal's theme. So you can just run them (~instant):
 The `%` prompts are symbolic of user prompt. The `$` are used in `shout` outputs.
 
 ```sh
-# Runs the tests and output example commands and output specific to your theme.
-./test.sh
+./test.sh # Runs the tests outputing example commands and outputs.
 ```
 
 ## Work In Progress

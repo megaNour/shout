@@ -50,10 +50,10 @@ test='shout "$_red" "This is a red line log. You can change the color."'
 expected=$(printf "%s" "${tred}This is a red line log. You can change the color.$_res")
 run "$test" "$expected"
 
+printf '%s\n' "% unset SHOUT_ENABLED"
 unset SHOUT_ENABLED
-printf '%s\n' "%% unset SHOUT_ENABLED"
-test='shout "f$_red" "The force switch bypasses SHOUT_ENABLED. Switches go before any color."'
-expected=$(printf "%s" "${_red}The force switch bypasses SHOUT_ENABLED. Switches go before any color.$_res")
+test='shout "f$_red" "The \"f\"orce switch bypasses SHOUT_ENABLED. Switches go before any color."'
+expected=$(printf "%s" "${_red}The \"f\"orce switch bypasses SHOUT_ENABLED. Switches go before any color.$_res")
 run "$test" "$expected"
 
 test='shout fa This is a positional arg log using the \"a\" switch.'
@@ -76,3 +76,12 @@ run "$test" "$expected"
 test='shout f$_RED$_bla "Combining colors to make sure you notice the pipe in the previous test."'
 expected="${tRED}${tbla}Combining colors to make sure you notice the pipe in the previous test.$tres"
 run "$test" "$expected"
+
+printf '\n'
+shout f "Here! Have a rainbow with the \"r\" switch!"
+printf '%s\n' "% shout r"
+shout r
+printf '\n'
+shout f "Here! Have a Palestine flag with the \"p\" switch!"
+printf '%s\n' "% shout p"
+shout p
