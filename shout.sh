@@ -56,13 +56,13 @@ Environments:
 OPT_STRING:
   Must come with the form: "${_yel}[switches][colors]$_res" where switches are: $_gry# see predefined colors at the bottom
 
-  ${_yel}h$_res: display this message
+  $_bol${_yel}h$_res: display this message
 
-  ${_yel}a$_res: pretty prints positional arguments. Only work in ${_bol}line-mode$_res
+  $_bol${_yel}r$_res: display 256 colors with their index. (no worries, it's compact)
 
-  ${_yel}f$_res: force prints to stderr (i.e. bypass ${_yel}SHOUT_ENABLED$_res)
+  $_bol${_yel}a$_res: pretty print positional arguments.
 
-  ${_yel}r$_res: display 256 colors with their index. (no worries, it's compact)
+  $_bol${_yel}f$_res: force print to stderr (i.e. bypass ${_yel}SHOUT_ENABLED$_res)
 
 Supported log modes:
   - Single line: prints "\$@" to stderr after shifting the optstring string.
