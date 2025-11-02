@@ -172,8 +172,4 @@ $_GRN$_red◤                                                                   
 EOF
 }
 
-_shoutRedact() { # WIP remove sensitive or noisy output
-  sed 's/--oauth2-bearer [^ ]*/--oauth2-bearer <MY_TOKEN>/gi'
-}
-
 ${1:+_shoutHelp "$@"}

@@ -24,10 +24,6 @@ The `%` prompts are symbolic of user prompt. The `$` are used in `shout` outputs
 ./test.sh # Runs the tests outputing example commands and outputs.
 ```
 
-## Work In Progress
+## TODO
 
-This is at the stage of "gluing together some handy logging functions I wrote here
-and there".
-
-- A chain filtering system should emerge.
-- The buffer and flush logs should come back.
+Maybe filtering, log leveling, log&executing...
