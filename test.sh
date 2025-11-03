@@ -80,10 +80,10 @@ test='shout f$_RED$_bla "Combining colors to make sure you notice the pipe in th
 expected="${tRED}${tbla}Combining colors to make sure you notice the pipe in the previous test.$tres"
 run "$test" "$expected"
 
-shout "f" "Did you notice logs did not have a level in previous tests?"
-shout "f" "They are unknown level logs."
-shout "f" "Unknown level logs will not be filtered by log level, so they will still pass if logs are enabled or with \"f\"orce..."
-shout "f" "Let's see how it goes"
+printf "%s\n" "${_gry}Did you notice logs did not have a level in previous tests?$_res"
+printf "%s\n" "${_gry}They are unknown level logs.$_res"
+printf "%s\n" "${_gry}Unknown level logs will not be filtered by log level, so they will still pass if logs are enabled or with \"f\"orce...$_res"
+printf "%s\n" "${_gry}Let us see how it goes$_res"
 
 printf "%s\n" "% SHOUT_ENABLED=1 SHOUT_LEVEL=5"
 SHOUT_ENABLED=1 SHOUT_LEVEL=5
@@ -92,7 +92,7 @@ test='shout 5 This is a level 5 log, it can pass!'
 expected="${tgry}This is a level 5 log, it can pass!$tres"
 run "$test" "$expected"
 
-test='shout 4 This is a level 4 log, it cannot pass!'
+test='shout 4 This is a level 4 log, it cannot display!'
 expected=
 run "$test" "$expected"
 
@@ -118,12 +118,11 @@ test='shout "" This is an unknown level log, it cannot pass anymore!'
 expected=
 run "$test" "$expected"
 
-printf '\n'
-shout f "Here! Have a rainbow with the \"r\" switch!"
+printf '\n%s\n' "${_gry}Here! Have a rainbow with the \"r\" switch!$_res"
 printf '%s\n' "% shout r"
 shout r
 printf '\n'
 shout f$_GRN$_bla Victory! You passed all the tests!
-shout f$_grn Here! Have a Palestine flag with the \"p\" switch!
+printf '%s\n' "${_grn}Here! Have a Palestine flag with the \"p\" switch!$_res"
 printf '%s\n' "% shout p"
 shout p

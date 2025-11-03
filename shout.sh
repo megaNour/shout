@@ -43,53 +43,60 @@ $_grn     .D#j     E#t  E#t  $_red      f#D#;   E###f   t#E
 $_grn    ,WK,      f#t  f#t  $_red       G#t    E#K,    t#E
 $_grn    EG.        ii   ii  $_red        t     EL       fE
 $_grn    ,                   $_red              :         :
+                        $_RED $_bol${_def}v0.1.0 $_res
 
-                      ${_def}v0.1.0$_res
+Multi-modal logger taking switches log level and colors in a single ${_yel}OPT_STRING$_res.
 
-Description:
-  multi-modal logger taking optstring and colors.
+${_mag}Philosophy:$_res
+  - No background process
+  - No runtime # ${_gry}shout is part of your shell process$_res
+  - No subprocess # ${_gry}ok except cat | tee in stream-mode$_res
+  - No JIT values # ${_gry}no \$(whatevere)$_res
 
-Usage:
+${_mag}Usage:$_res
   ./shout.sh [ANYTHING]        $_gry# print this message$_res
   . ./shout.sh                 $_gry# source the lib$_res
-  shout OPT_STRING [ARGUMENTS] $_gry# line mode$_res
-  command | shout OPT_STRING   $_gry# stream mode$_res
+  shout ${_yel}OPT_STRING$_res [ARGUMENT...] $_gry# line mode$_res
+  command | shout ${_yel}OPT_STRING$_res   $_gry# stream mode$_res
 
-Environments:
+${_mag}Environments:$_res ${_gry}You can use the following$_res
   ${_yel}SHOUT_ENABLED$_res - global logging switch. Can be bypassed with ${_yel}f$_res opt.
+  ${_yel}SHOUT_LEVEL$_res - the minimal log level accepted. Can be bypassed with ${_yel}f$_res opt.
+  ${_yel}SHOUT_KNOWN_LEVEL_ONLY$_res - discards logs with no level. Can be bypassed with ${_yel}f$_res opt.
 
-OPT_STRING:
-  Must come with the form: "${_yel}[switches][colors]$_res" where switches are: $_gry# see predefined colors at the bottom
+${_mag}OPT_STRING:$_res ${_yel}[LOG_LEVEL|SWITCH...][COLOR...]$_res $_gry# see predefined colors at the bottom$_res
 
+${_mag}SWITCH:$_res ${_gry}# combinable
   $_bol${_yel}h$_res: display this message
-
   $_bol${_yel}p$_res: display Palestine flag.
-
   $_bol${_yel}r$_res: display 256 colors with their index. (no worries, it's compact)
-
+    Not all those colors are predefined. This is just a visual help for defining your own.
+    Predefined colors are at the bottom.
   $_bol${_yel}a$_res: pretty print positional arguments.
-
   $_bol${_yel}f$_res: force print to stderr (i.e. bypass ${_yel}SHOUT_ENABLED$_res)
 
-Supported log modes:
-  - Single line: prints "\$@" to stderr after shifting the optstring string.
-  - Stream     : forwards stdin to stdout and tees a colorized copy to stderr.
+${_mag}LOG_LEVEL:$_res $_gry# single number$_res
+  > 0 integer indicating the criticity of your log. It is the first number found in your ${_yel}OPT_STRING$_res.
 
-Examples:
+${_mag}COLOR:$_res $_gry# combinable$_res
+  Color sequences are passed at the end of the ${_yel}OPT_STRING$_res. They must be of the form starting with "^[".
+  Preset colors are included. $_gry# See at the bottom$_res
+
+${_mag}Supported log modes:$_res
+  - ${_yel}line-mode$_res:      prints "\$@" to stderr after shifting the optstring.
+  - ${_yel}stream-mode$_res:    forwards stdin to stdout and tees a colorized copy to stderr.
+
+${_mag}Examples:$_res
   ${_gry}# This prints red logs in red to stderr even if SHOUT_ENABLED is off${_res}
   shout "f.\$_red"
-  ${_gry}# This prints in grey to stderr even if SHOUT_ENABLED is off and forwards to myNextProcess$_res
-  echo "streamed text" | shout f | myNextProcess
+  ${_gry}# This prints in grey to stderr if SHOUT_LEVEL <= 5 and forwards to myNextProcess$_res
+  echo "streamed text" | shout 5 | myNextProcess
 
-Included colors: $_gry(you can define and pass your own...)$_def
-
-foregrounds: $_gry\$_gry (default for logging)$_red \$_red$_grn \$_grn$_yel \$_yel$_blu \$_blu$_mag \$_mag$_cya \$cya$_whi \$_whi$_def \$_def $_def$_bla \$bla$_res
-backgrounds: $_GRY \$_GRY $_RED \$_RED $_GRN$_bla \$_GRN $_YEL \$_YEL $_BLU \$_BLU $_MAG \$_MAG $_CYA \$CYA $_WHI \$_WHI $_DEF \$_DEF$_res$_gry # everything combines$_res
-
-Included modifiers:
-
-$_bol  - \$_bol$_gry bold combines with any color.
-$_res  - \$_res$_gry resets everything.$_res
+${_mag}Included colors:$_res $_gry(you can define and pass your own...)$_def
+foregrounds: $_gry\$_gry # default for logging$_red \$_red$_grn \$_grn$_yel \$_yel$_blu \$_blu$_mag \$_mag$_cya \$cya$_whi \$_whi$_def \$_def $_def$_DEF$_bla \$bla $_res $_gry # the white background is just for visibility here$_res
+backgrounds: $_GRY\$_GRY $_RED \$_RED $_GRN$_bla \$_GRN $_YEL \$_YEL $_BLU \$_BLU $_MAG \$_MAG $_CYA \$CYA $_WHI \$_WHI $_DEF \$_DEF $_BLA$_def \$_BLA$_res$_gry # everything combines$_res
+modifiers:   $_bol\$_bol$_gry # bold combines with any color$_res
+finally:     \$_res$_gry # resets everything.$_res
 EOF
 }
 
