@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 . ./shout.sh
 SHOUT_ENABLED=1
 
@@ -27,6 +29,7 @@ EOF
 $actual
 EOF
     } >&2
+    return 1
   fi
 }
 
