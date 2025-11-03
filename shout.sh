@@ -27,6 +27,15 @@ _GRY="[48;5;8m"
 _DEF="[48;5;15m"
 _BLA="[48;5;16m"
 
+# If value is set and not null, keep it as the user customized it.
+# If value is unset, set the default as the user may not know about it.
+# If value was set to null, keep it null. It means the user wants it that way.
+SHOUT_COLOR=${SHOUT_COLOR=$_gry}
+# The default args color follows the same logic and fallsback to the same value.
+SHOUT_ARGS_COLOR=${SHOUT_ARGS_COLOR=$_gry}
+# The default stream color follows the same logic and fallsback to the same value.
+SHOUT_STREAM_COLOR=${SHOUT_STREAM_COLOR=$_gry}
+
 _shoutHelp() {
   cat <<EOF
 $_bol                        $_red        :
@@ -63,8 +72,16 @@ ${_mag}Environments:$_res ${_gry}You can use the following$_res
   ${_yel}SHOUT_ENABLED$_res - global logging switch. Can be bypassed with ${_yel}f$_res opt.
   ${_yel}SHOUT_LEVEL$_res - the minimal log level accepted. Can be bypassed with ${_yel}f$_res opt.
   ${_yel}SHOUT_KNOWN_LEVEL_ONLY$_res - discards logs with no level. Can be bypassed with ${_yel}f$_res opt.
+  ${_yel}SHOUT_COLOR$_res - default color is always appended, provided or not.
+    Set to null to disable. However, if you unset it, it will fallback to grey.
+    You can ignore it and put your own custom colors in your logs when you want.
+  ${_yel}SHOUT_ARGS_COLOR$_res - default args listing color.
+    Set to null to disable. However, if you unset it, it will fallback to grey.
+  ${_yel}SHOUT_STREAM_COLOR$_res - default stream color.
+    Set to null to disable. However, if you unset it, it will fallback to grey.
 
-${_mag}OPT_STRING:$_res ${_yel}[LOG_LEVEL|SWITCH...][COLOR...]$_res $_gry# see predefined colors at the bottom$_res
+
+${_mag}OPT_STRING:$_res ${_yel}[LOG_LEVEL|SWITCH...]$_res $_gry# see predefined colors at the bottom$_res
 
 ${_mag}SWITCH:$_res ${_gry}# combinable
   $_bol${_yel}h$_res: display this message
@@ -93,30 +110,28 @@ ${_mag}Examples:$_res
   echo "streamed text" | shout 5 | myNextProcess
 
 ${_mag}Included colors:$_res $_gry(you can define and pass your own...)$_def
-foregrounds: $_gry\$_gry # default for logging$_red \$_red$_grn \$_grn$_yel \$_yel$_blu \$_blu$_mag \$_mag$_cya \$cya$_whi \$_whi$_def \$_def $_def$_DEF$_bla \$bla $_res $_gry# the white background is just for visibility here$_res
-backgrounds: $_GRY\$_GRY$_RED\$_RED$_GRN$_bla\$_GRN$_YEL\$_YEL$_BLU\$_BLU$_MAG\$_MAG$_CYA\$CYA$_WHI\$_WHI$_DEF\$_DEF$_BLA$_def\$_BLA$_res$_gry # everything combines$_res
-modifiers:   $_bol\$_bol$_gry # bold combines with any color$_res
-finally:     \$_res$_gry # resets everything.$_res
+foregrounds:  $_gry\$_gry $_red \$_red  $_grn\$_grn  $_yel\$_yel  $_blu\$_blu  $_mag\$_mag  $_cya\$cya  $_whi\$_whi  $_def\$_def$_def $_DEF$_bla \$_bla $_res
+backgrounds: $_GRY \$_GRY $_RED \$_RED $_GRN$_bla \$_GRN $_YEL \$_YEL $_BLU \$_BLU $_MAG \$_MAG $_CYA \$CYA $_WHI \$_WHI $_DEF \$_DEF $_BLA$_def \$_BLA $_res
+modifiers:    $_bol\$_bol$_gry # bold combines with any color$_res
+finally:      \$_res$_gry # resets everything.$_res
 EOF
 }
 
 shout() {
-  unset _shout_color _shout_level _shout_force
+  unset _shout_level _shout_force
   optstring=$1
   shift
 
-  optstring_without_color=${optstring%%*}
-
   # terminal switches
-  if [ "${optstring_without_color#*h}" != "$optstring_without_color" ]; then _shoutHelp && return 0; fi
-  if [ "${optstring_without_color#*r}" != "$optstring_without_color" ]; then _shoutRainbow && return 0; fi
-  if [ "${optstring_without_color#*p}" != "$optstring_without_color" ]; then _shoutPalestine && return 0; fi
+  if [ "${optstring#*h}" != "$optstring" ]; then _shoutHelp && return 0; fi
+  if [ "${optstring#*r}" != "$optstring" ]; then _shoutRainbow && return 0; fi
+  if [ "${optstring#*p}" != "$optstring" ]; then _shoutPalestine && return 0; fi
 
-  if [ "${optstring_without_color#*f}" != "$optstring_without_color" ]; then _shout_force=1; fi
+  if [ "${optstring#*f}" != "$optstring" ]; then _shout_force=1; fi
   if [ ! "$SHOUT_ENABLED" ] && [ -z "$_shout_force" ]; then return 0; fi
 
   if [ -z "$_shout_force" ]; then                                         # further checks needed on log level
-    _shout_level=${optstring_without_color%%[^0-9]*}                      # the first number only is the level
+    _shout_level=${optstring%%[^0-9]*}                                    # the first number only is the level
     _shout_level=${_shout_level#*[^0-9]}                                  # it can be before or after switches
     if { [ -n "$SHOUT_KNOWN_LEVEL_ONLY" ] && [ -z "$_shout_level" ]; } || # check if level-less logs are rejected or...
       { [ -n "$_shout_level" ] &&                                         # if there is a level
@@ -133,16 +148,16 @@ shout() {
   fi
   : "${_shout_color:=$_gry}" # otherwise fallback to grey
 
-  if [ -t 0 ]; then                                                            # line mode
-    if [ "${optstring_without_color#*a}" != "$optstring_without_color" ]; then # args switch
+  if [ -t 0 ]; then                                # line mode
+    if [ "${optstring#*a}" != "$optstring" ]; then # args switch
       _shoutArgs "$@"
     else # regular line
       _shoutLine "$@"
     fi
   else # stream mode
-    printf '%s' "$_shout_color" >&2
+    if [ -n "$SHOUT_STREAM_COLOR" ]; then printf '%s' "$SHOUT_STREAM_COLOR" >&2; fi
     cat | tee /dev/stderr
-    printf '%s' "$_res" >&2
+    printf '%s' "$_res" >&2 # Never spare it, we don't know if there are custom colors and we guarantee the reset.
   fi
 }
 
@@ -150,12 +165,12 @@ _shoutArgs() { # log positional arguments indexed
   i=0
   for arg in "$@"; do
     i=$((i + 1))
-    _shoutLine "\$$i: $arg"
+    SHOUT_COLOR=$SHOUT_ARGS_COLOR _shoutLine "\$$i: $arg"
   done
 }
 
 _shoutLine() { # log positional arguments inline
-  printf "%s%s%s\n" "${_shout_color}" "$*" "${_res}" >&2
+  printf "%s%s%s\n" "$SHOUT_COLOR" "$*" "$_res" >&2
 }
 
 _shoutRainbow() {

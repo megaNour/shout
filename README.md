@@ -45,8 +45,16 @@ Environments: You can use the following
   SHOUT_ENABLED - global logging switch. Can be bypassed with f opt.
   SHOUT_LEVEL - the minimal log level accepted. Can be bypassed with f opt.
   SHOUT_KNOWN_LEVEL_ONLY - discards logs with no level. Can be bypassed with f opt.
+  SHOUT_COLOR - default color is always appended, provided or not.
+    Set to null to disable. However, if you unset it, it will fallback to grey.
+    You can ignore it and put your own custom colors in your logs when you want.
+  SHOUT_ARGS_COLOR - default args listing color.
+    Set to null to disable. However, if you unset it, it will fallback to grey.
+  SHOUT_STREAM_COLOR - default stream color.
+    Set to null to disable. However, if you unset it, it will fallback to grey.
 
-OPT_STRING: [LOG_LEVEL|SWITCH...][COLOR...] # see predefined colors at the bottom
+
+OPT_STRING: [LOG_LEVEL|SWITCH...] # see predefined colors at the bottom
 
 SWITCH: # combinable
   h: display this message
@@ -75,10 +83,10 @@ Examples:
   echo "streamed text" | shout 5 | myNextProcess
 
 Included colors: (you can define and pass your own...)
-foregrounds: $_gry # default for logging $_red $_grn $_yel $_blu $_mag $cya $_whi $_def  $bla  # the white background is just for visibility here
-backgrounds: $_GRY$_RED$_GRN$_YEL$_BLU$_MAG$CYA$_WHI$_DEF$_BLA # everything combines
-modifiers:   $_bol # bold combines with any color
-finally:     $_res # resets everything.
+foregrounds:  $_gry  $_red  $_grn  $_yel  $_blu  $_mag  $cya  $_whi  $_def  $_bla
+backgrounds:  $_GRY  $_RED  $_GRN  $_YEL  $_BLU  $_MAG  $CYA  $_WHI  $_DEF  $_BLA
+modifiers:    $_bol # bold combines with any color
+finally:      $_res # resets everything.
 ```
 
 ## Examples - To Be Run in Your Own Terminal for Colors
@@ -94,13 +102,27 @@ So you can just run them (~instant):
 % shout "" "This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING."
 This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING.
 Test passed!
-% shout "$_red" "This is a red line log. You can change the color."
-This is a red line log. You can change the color.
+
+% SHOUT_COLOR=$_red # Let's define the default color to red.
+% shout "" "${_red}This is a red line log.$_grn You$_yel can$_blu change$_mag the$_cya color$_whi by$_def inserting your own escape sequences. They will be preserved."
+This is a red line log. You can change the color by inserting your own escape sequences. They will be preserved.
 Test passed!
+
+% SHOUT_COLOR= # You can also opt out of default color by setting it to null. Unsetting it would activate back the default fallback!
+% shout "" "This is printed in regular color :'("
+This is printed in regular color :'(
+Test passed!
+
+% SHOUT_COLOR=$_gry
+% shout "" "This is printed in grey :)"
+This is printed in grey :)
+Test passed!
+
 % unset SHOUT_ENABLED
-% shout "f$_red" "The \"f\"orce switch bypasses SHOUT_ENABLED. Switches go before any color."
+% shout "f" "${_red}The \"f\"orce switch bypasses SHOUT_ENABLED. Switches go before any color."
 The "f"orce switch bypasses SHOUT_ENABLED. Switches go before any color.
 Test passed!
+
 % shout fa This is a positional arg log using the \"a\" switch.
 $1: This
 $2: is
@@ -113,12 +135,12 @@ $8: the
 $9: "a"
 $10: switch.
 Test passed!
+
+% SHOUT_STREAM_COLOR=$_RED$_bla # there is a stream color defaulting to SHOUT_COLOR that you can utilize.
 % printf "%s" "This is streamed to stdin and stderr. Thus, you see it twice." | shout f
 This is streamed to stdin and stderr. Thus, you see it twice.This is streamed to stdin and stderr. Thus, you see it twice.
 Test passed!
-% shout f$_RED$_bla "Combining colors to make sure you notice the pipe in the previous test."
-Combining colors to make sure you notice the pipe in the previous test.
-Test passed!
+
 Did you notice logs did not have a level in previous tests?
 They are unknown level logs.
 Unknown level logs will not be filtered by log level, so they will still pass if logs are enabled or with "f"orce...
@@ -127,9 +149,11 @@ Let us see how it goes
 % shout 5 This is a level 5 log, it can pass!
 This is a level 5 log, it can pass!
 Test passed!
+
 % shout 4 This is a level 4 log, it cannot display!
 
 Test passed!
+
 % shout a5 "By the way:" "Switches and log level can be written in any order." "Just remember:" "- Only the first number is a log level!" "- The colors are always last!"
 $1: By the way:
 $2: Switches and log level can be written in any order.
@@ -137,14 +161,17 @@ $3: Just remember:
 $4: - Only the first number is a log level!
 $5: - The colors are always last!
 Test passed!
+
 % shout "" Now the terrible truth:\
  multiline strings will end up on one line.
 Now the terrible truth: multiline strings will end up on one line.
 Test passed!
+
 % SHOUT_KNOWN_LEVEL_ONLY=1
 % shout "" This is an unknown level log, it cannot pass anymore!
 
 Test passed!
+
 
 Here! Have a rainbow with the "r" switch!
 % shout r
@@ -171,7 +198,6 @@ Here! Have a Palestine flag with the "p" switch!
 ██◤
 █◤
 ◤
-
 ```
 
 ## TODO
