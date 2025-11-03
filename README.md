@@ -10,7 +10,75 @@ The following will explain what the `OPT_STRING` is and which values it takes.
 % ./shout.sh help # Any argument will display help. This avoids printing when sourcing.
 % . ./shout.sh # Source it.
 % shout h # The `h` switch also displays help.
-# Now! Just go and read it already!
+# Should look like that but with colors!
+                                :
+             .                 t#,    :
+            ;W.    .          ;##W.   Ef
+           f#Ef    Dt        :#L:WE   E#t  GEEEEEEEL
+         .E#f  ai  E#i      .KG  ,#D  E#t  ,;;L#K;;.
+        iWW;  E#t  E#t      EE    ;#f E#t     t#E
+       L##LffiE#t  E#t     f#.     t#iE#t  i  t#E
+      tLLG##L E########f  .:#G     GK E#t .#j t#E
+        ,W#i  E#j..K#j..    ;#L   LW. E#t ;#L t#E
+       j#E.   E#t  E#t       t#f f#:  E#tf#E: t#E
+     .D#j     E#t  E#t        f#D#;   E###f   t#E
+    ,WK,      f#t  f#t         G#t    E#K,    t#E
+    EG.        ii   ii          t     EL       fE
+    ,                                 :         :
+                         v0.1.0
+
+Multi-modal logger taking switches log level and colors in a single OPT_STRING.
+
+Philosophy:
+  - No background process
+  - No runtime    # shout is part of your shell process
+  - No subprocess # ok except cat | tee in stream-mode
+  - No JIT values # no $(whatevere)
+
+Usage:
+  ./shout.sh [ANYTHING]          # print this message
+  . ./shout.sh                   # source the lib
+  shout OPT_STRING [ARGUMENT...] # line mode
+  command | shout OPT_STRING     # stream mode
+
+Environments: You can use the following
+  SHOUT_ENABLED - global logging switch. Can be bypassed with f opt.
+  SHOUT_LEVEL - the minimal log level accepted. Can be bypassed with f opt.
+  SHOUT_KNOWN_LEVEL_ONLY - discards logs with no level. Can be bypassed with f opt.
+
+OPT_STRING: [LOG_LEVEL|SWITCH...][COLOR...] # see predefined colors at the bottom
+
+SWITCH: # combinable
+  h: display this message
+  p: display Palestine flag.
+  r: display 256 colors with their index. (no worries, it is compact)
+     Not all those colors are predefined. This is just a visual help for defining your own.
+     Predefined colors are at the bottom.
+  a: pretty print positional arguments.
+  f: force print to stderr (i.e. bypass SHOUT_ENABLED)
+
+LOG_LEVEL: # single number
+  > 0 integer indicating the criticity of your log. It is the first number found in your OPT_STRING.
+
+COLOR: # combinable
+  Color sequences are passed at the end of the OPT_STRING. They must be of the form starting with "^[".
+  Preset colors are included. # See at the bottom
+
+Supported log modes:
+  - line-mode:      prints "$@" to stderr after shifting the optstring.
+  - stream-mode:    forwards stdin to stdout and tees a colorized copy to stderr.
+
+Examples:
+  # This prints red logs in red to stderr even if SHOUT_ENABLED is off
+  shout "f.$_red"
+  # This prints in grey to stderr if SHOUT_LEVEL <= 5 and forwards to myNextProcess
+  echo "streamed text" | shout 5 | myNextProcess
+
+Included colors: (you can define and pass your own...)
+foregrounds: $_gry # default for logging $_red $_grn $_yel $_blu $_mag $cya $_whi $_def  $bla  # the white background is just for visibility here
+backgrounds: $_GRY$_RED$_GRN$_YEL$_BLU$_MAG$CYA$_WHI$_DEF$_BLA # everything combines
+modifiers:   $_bol # bold combines with any color
+finally:     $_res # resets everything.
 ```
 
 ## Examples - To Be Run in Your Own Terminal for Colors

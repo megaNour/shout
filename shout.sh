@@ -49,15 +49,15 @@ Multi-modal logger taking switches log level and colors in a single ${_yel}OPT_S
 
 ${_mag}Philosophy:$_res
   - No background process
-  - No runtime # ${_gry}shout is part of your shell process$_res
-  - No subprocess # ${_gry}ok except cat | tee in stream-mode$_res
-  - No JIT values # ${_gry}no \$(whatevere)$_res
+  - No runtime    ${_gry}# shout is part of your shell process$_res
+  - No subprocess ${_gry}# ok except cat | tee in stream-mode$_res
+  - No JIT values ${_gry}# no \$(whatevere)$_res
 
 ${_mag}Usage:$_res
-  ./shout.sh [ANYTHING]        $_gry# print this message$_res
-  . ./shout.sh                 $_gry# source the lib$_res
+  ./shout.sh [ANYTHING]          $_gry# print this message$_res
+  . ./shout.sh                   $_gry# source the lib$_res
   shout ${_yel}OPT_STRING$_res [ARGUMENT...] $_gry# line mode$_res
-  command | shout ${_yel}OPT_STRING$_res   $_gry# stream mode$_res
+  command | shout ${_yel}OPT_STRING$_res     $_gry# stream mode$_res
 
 ${_mag}Environments:$_res ${_gry}You can use the following$_res
   ${_yel}SHOUT_ENABLED$_res - global logging switch. Can be bypassed with ${_yel}f$_res opt.
@@ -69,9 +69,9 @@ ${_mag}OPT_STRING:$_res ${_yel}[LOG_LEVEL|SWITCH...][COLOR...]$_res $_gry# see p
 ${_mag}SWITCH:$_res ${_gry}# combinable
   $_bol${_yel}h$_res: display this message
   $_bol${_yel}p$_res: display Palestine flag.
-  $_bol${_yel}r$_res: display 256 colors with their index. (no worries, it's compact)
-    Not all those colors are predefined. This is just a visual help for defining your own.
-    Predefined colors are at the bottom.
+  $_bol${_yel}r$_res: display 256 colors with their index. (no worries, it is compact)
+     Not all those colors are predefined. This is just a visual help for defining your own.
+     Predefined colors are at the bottom.
   $_bol${_yel}a$_res: pretty print positional arguments.
   $_bol${_yel}f$_res: force print to stderr (i.e. bypass ${_yel}SHOUT_ENABLED$_res)
 
@@ -93,8 +93,8 @@ ${_mag}Examples:$_res
   echo "streamed text" | shout 5 | myNextProcess
 
 ${_mag}Included colors:$_res $_gry(you can define and pass your own...)$_def
-foregrounds: $_gry\$_gry # default for logging$_red \$_red$_grn \$_grn$_yel \$_yel$_blu \$_blu$_mag \$_mag$_cya \$cya$_whi \$_whi$_def \$_def $_def$_DEF$_bla \$bla $_res $_gry # the white background is just for visibility here$_res
-backgrounds: $_GRY\$_GRY $_RED \$_RED $_GRN$_bla \$_GRN $_YEL \$_YEL $_BLU \$_BLU $_MAG \$_MAG $_CYA \$CYA $_WHI \$_WHI $_DEF \$_DEF $_BLA$_def \$_BLA$_res$_gry # everything combines$_res
+foregrounds: $_gry\$_gry # default for logging$_red \$_red$_grn \$_grn$_yel \$_yel$_blu \$_blu$_mag \$_mag$_cya \$cya$_whi \$_whi$_def \$_def $_def$_DEF$_bla \$bla $_res $_gry# the white background is just for visibility here$_res
+backgrounds: $_GRY\$_GRY$_RED\$_RED$_GRN$_bla\$_GRN$_YEL\$_YEL$_BLU\$_BLU$_MAG\$_MAG$_CYA\$CYA$_WHI\$_WHI$_DEF\$_DEF$_BLA$_def\$_BLA$_res$_gry # everything combines$_res
 modifiers:   $_bol\$_bol$_gry # bold combines with any color$_res
 finally:     \$_res$_gry # resets everything.$_res
 EOF
