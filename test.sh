@@ -72,12 +72,8 @@ $tgry\$9: \"a\"$tres
 $tgry\$10: switch.$tres"
 run "$test" "$expected"
 
-test='printf "%s" "This is streamed to stdin and stderr. Thus, you see it twice." | shout f'
-expected="${tgry}This is streamed to stdin and stderr. Thus, you see it twice.This is streamed to stdin and stderr. Thus, you see it twice.$tres"
-run "$test" "$expected"
-
-test='shout f$_RED$_bla "Combining colors to make sure you notice the pipe in the previous test."'
-expected="${tRED}${tbla}Combining colors to make sure you notice the pipe in the previous test.$tres"
+test='printf "%s" "This is streamed to stdin and stderr. Thus, you see it twice." | shout f$_RED$_bla'
+expected="$tRED${tbla}This is streamed to stdin and stderr. Thus, you see it twice.This is streamed to stdin and stderr. Thus, you see it twice.$tres"
 run "$test" "$expected"
 
 printf "%s\n" "${_gry}Did you notice logs did not have a level in previous tests?$_res"
