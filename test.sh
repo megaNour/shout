@@ -80,11 +80,50 @@ test='shout f$_RED$_bla "Combining colors to make sure you notice the pipe in th
 expected="${tRED}${tbla}Combining colors to make sure you notice the pipe in the previous test.$tres"
 run "$test" "$expected"
 
+shout "f" "Did you notice logs did not have a level in previous tests?"
+shout "f" "They are unknown level logs."
+shout "f" "Unknown level logs will not be filtered by log level, so they will still pass if logs are enabled or with \"f\"orce..."
+shout "f" "Let's see how it goes"
+
+printf "%s\n" "% SHOUT_ENABLED=1 SHOUT_LEVEL=5"
+SHOUT_ENABLED=1 SHOUT_LEVEL=5
+
+test='shout 5 This is a level 5 log, it can pass!'
+expected="${tgry}This is a level 5 log, it can pass!$tres"
+run "$test" "$expected"
+
+test='shout 4 This is a level 4 log, it cannot pass!'
+expected=
+run "$test" "$expected"
+
+test='shout a5 "By the way:" "Switches and log level can be written in any order." "Just remember:" "- Only the first number is a log level!" "- The colors are always last!"'
+expected="$tgry\$1: By the way:$tres
+$tgry\$2: Switches and log level can be written in any order.$tres
+$tgry\$3: Just remember:$tres
+$tgry\$4: - Only the first number is a log level!$tres
+$tgry\$5: - The colors are always last!$tres"
+run "$test" "$expected"
+
+test='shout "" Now the terrible truth:\
+ multiline strings will end up on one line.'
+expected=$(
+  printf '%s' "${tgry}Now the terrible truth: multiline strings will end up on one line.$tres"
+)
+run "$test" "$expected"
+
+printf "%s\n" "% SHOUT_KNOWN_LEVEL_ONLY=1"
+SHOUT_KNOWN_LEVEL_ONLY=1
+
+test='shout "" This is an unknown level log, it cannot pass anymore!'
+expected=
+run "$test" "$expected"
+
 printf '\n'
 shout f "Here! Have a rainbow with the \"r\" switch!"
 printf '%s\n' "% shout r"
 shout r
 printf '\n'
-shout f "Here! Have a Palestine flag with the \"p\" switch!"
+shout f$_GRN$_bla Victory! You passed all the tests!
+shout f$_grn Here! Have a Palestine flag with the \"p\" switch!
 printf '%s\n' "% shout p"
 shout p
