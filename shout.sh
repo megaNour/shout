@@ -101,7 +101,7 @@ EOF
 }
 
 shout() {
-  unset optstring_without_color color level force
+  unset _shout_color _shout_level _shout_force
   optstring=$1
   shift
 
@@ -112,54 +112,50 @@ shout() {
   if [ "${optstring_without_color#*r}" != "$optstring_without_color" ]; then _shoutRainbow && return 0; fi
   if [ "${optstring_without_color#*p}" != "$optstring_without_color" ]; then _shoutPalestine && return 0; fi
 
-  if [ "${optstring_without_color#*f}" != "$optstring_without_color" ]; then force=1; fi
-  if [ ! "$SHOUT_ENABLED" ] && [ -z "$force" ]; then return 0; fi
+  if [ "${optstring_without_color#*f}" != "$optstring_without_color" ]; then _shout_force=1; fi
+  if [ ! "$SHOUT_ENABLED" ] && [ -z "$_shout_force" ]; then return 0; fi
 
-  if [ -z "$force" ]; then                                         # further checks needed on log level
-    level=${optstring_without_color%%[^0-9]*}                      # the first number only is the level
-    level=${level#*[^0-9]}                                         # it can be before or after switches
-    if { [ -n "$SHOUT_KNOWN_LEVEL_ONLY" ] && [ -z "$level" ]; } || # check if level-less logs are rejected or...
-      { [ -n "$level" ] &&                                         # if there is a level
-        [ "$level" -gt 0 ] 2>/dev/null &&                          # and it's > 0
-        [ "$level" -lt "$SHOUT_LEVEL" ]; }; then                   # and it's inferior to SHOUT_LEVEL
-      return 0                                                     # then abort
+  if [ -z "$_shout_force" ]; then                                         # further checks needed on log level
+    _shout_level=${optstring_without_color%%[^0-9]*}                      # the first number only is the level
+    _shout_level=${_shout_level#*[^0-9]}                                  # it can be before or after switches
+    if { [ -n "$SHOUT_KNOWN_LEVEL_ONLY" ] && [ -z "$_shout_level" ]; } || # check if level-less logs are rejected or...
+      { [ -n "$_shout_level" ] &&                                         # if there is a level
+        [ "$_shout_level" -gt 0 ] 2>/dev/null &&                          # and it's > 0
+        [ "$_shout_level" -lt "$SHOUT_LEVEL" ]; }; then                   # and it's inferior to SHOUT_LEVEL
+      return 0                                                            # then abort
     fi
   fi
 
   # check there is a color
   if [ "${optstring#*}" != "$optstring" ]; then
-    color=${optstring#*} # remove everything prepending eventual colors. the only safe stop is the escape char.
-    color="$color"       # so we add it back (only) if there is a color
+    _shout_color=${optstring#*}  # remove everything prepending eventual colors. the only safe stop is the escape char.
+    _shout_color="$_shout_color" # so we add it back (only) if there is a color
   fi
-  : "${color:=$_gry}" # otherwise fallback to grey
+  : "${_shout_color:=$_gry}" # otherwise fallback to grey
 
   if [ -t 0 ]; then                                                            # line mode
     if [ "${optstring_without_color#*a}" != "$optstring_without_color" ]; then # args switch
-      _shoutArgs "$color" "$@"
+      _shoutArgs "$@"
     else # regular line
-      _shoutLine "$color" "$@"
+      _shoutLine "$@"
     fi
   else # stream mode
-    printf '%s' "$color" >&2
+    printf '%s' "$_shout_color" >&2
     cat | tee /dev/stderr
     printf '%s' "$_res" >&2
   fi
 }
 
 _shoutArgs() { # log positional arguments indexed
-  color=${1:-$_gry}
-  shift
   i=0
   for arg in "$@"; do
     i=$((i + 1))
-    _shoutLine "$color" "\$$i: $arg"
+    _shoutLine "\$$i: $arg"
   done
 }
 
 _shoutLine() { # log positional arguments inline
-  color=$1
-  shift
-  printf "%s%s%s\n" "${color}" "$*" "${_res}" >&2
+  printf "%s%s%s\n" "${_shout_color}" "$*" "${_res}" >&2
 }
 
 _shoutRainbow() {
