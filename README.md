@@ -45,8 +45,8 @@ Usage:
   command | shout OPT_STRING     # stream mode
 
 Environments:
-  SHOUT_ENABLED            global logging switch. Can be bypassed with f opt.
   # Log levels.
+  SHOUT_DISABLED           global logging switch. Can be bypassed with f opt.
   SHOUT_LEVEL              the minimal log level accepted. Can be bypassed with f opt.
   SHOUT_KNOWN_LEVEL_ONLY   discards logs with no level. Can be bypassed with f opt.
   # Default colors. All grey. Set them to null to use your regular text color.
@@ -58,7 +58,7 @@ OPT_STRING: [LOG_LEVEL|SWITCH...] # see predefined colors at the bottom
 
 SWITCH: # combinable
   a: pretty print positional arguments.
-  f: force print to stderr (i.e. bypass SHOUT_ENABLED)
+  f: force print to stderr (i.e. bypass SHOUT_DISABLED)
 
 LOG_LEVEL: # single number
   > 0 integer indicating the criticity of your log. It is the first number found in your OPT_STRING.
@@ -69,7 +69,7 @@ Supported log modes:
 
 Examples:
   # see much more examples by running the tests with `shoutctl test`
-  # This prints a red log (and resets colors) in red to stderr even if SHOUT_ENABLED is off
+  # This prints a red log (and resets colors) in red to stderr even if SHOUT_DISABLED is set.
   shout f "${_red}The pizza is blue."
   # This prints in grey to stderr (and resets colors) if SHOUT_LEVEL <= 5 and forwards to myNextProcess
   echo "streamed text" | shout 5 | myNextProcess

@@ -29,8 +29,8 @@ ${_mag}Usage:$_res
   command | shout ${_yel}OPT_STRING$_res     $_gry# stream mode$_res
 
 ${_mag}Environments:$_res
-  ${_yel}SHOUT_ENABLED$_res            global logging switch. Can be bypassed with ${_yel}f$_res opt.
   $_gry# Log levels.
+  ${_yel}SHOUT_DISABLED$_res           global logging switch. Can be bypassed with ${_yel}f$_res opt.
   ${_yel}SHOUT_LEVEL$_res              the minimal log level accepted. Can be bypassed with ${_yel}f$_res opt.
   ${_yel}SHOUT_KNOWN_LEVEL_ONLY$_res   discards logs with no level. Can be bypassed with ${_yel}f$_res opt.
   $_gry# Default colors. All grey. Set them to null to use your regular text color.
@@ -42,7 +42,7 @@ ${_mag}OPT_STRING:$_res ${_yel}[LOG_LEVEL|SWITCH...]$_res $_gry# see predefined 
 
 ${_mag}SWITCH:$_res ${_gry}# combinable
   $_bol${_yel}a$_res: pretty print positional arguments.
-  $_bol${_yel}f$_res: force print to stderr (i.e. bypass ${_yel}SHOUT_ENABLED$_res)
+  $_bol${_yel}f$_res: force print to stderr (i.e. bypass ${_yel}SHOUT_DISABLED$_res)
 
 ${_mag}LOG_LEVEL:$_res $_gry# single number$_res
   > 0 integer indicating the criticity of your log. It is the first number found in your ${_yel}OPT_STRING$_res.

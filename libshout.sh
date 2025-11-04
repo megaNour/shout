@@ -7,7 +7,7 @@ shout() {
 
   if [ ! -t 0 ]; then _shout_stream=1; fi
   if [ "${optstring#*f}" != "$optstring" ]; then _shout_force=1; fi
-  if [ ! "$SHOUT_ENABLED" ] && [ -z "$_shout_force" ]; then _shout_silently=1; fi
+  if [ "$SHOUT_DISABLED" ] && [ -z "$_shout_force" ]; then _shout_silently=1; fi
 
   if [ -z "$_shout_force" ]; then                                         # further checks needed on log level
     _shout_level=${optstring%%[^0-9]*}                                    # the first number only is the level

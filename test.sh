@@ -5,7 +5,6 @@ set -e
 ENTRY=$(dirname "$0")
 . "$ENTRY/colors.sh"
 . "$ENTRY/libshout.sh"
-SHOUT_ENABLED=1
 
 res="[0m"
 red="[38;5;1m"
@@ -82,11 +81,11 @@ test='shout "" "This is printed in grey :)"'
 expected=$(printf "%s" "${gry}This is printed in grey :)$res")
 run "$test" "$expected"
 
-printf '%s\n' "% unset SHOUT_ENABLED"
-unset SHOUT_ENABLED
+printf '%s\n' "% SHOUT_DISABLED=1"
+SHOUT_DISABLED=1
 
-test='shout "f" "${_red}The \"f\"orce switch bypasses SHOUT_ENABLED. Switches go before any color."'
-expected=$(printf "%s" "$gry${_red}The \"f\"orce switch bypasses SHOUT_ENABLED. Switches go before any color.$_res")
+test='shout "f" "${_red}The \"f\"orce switch bypasses SHOUT_DISABLED. Switches go before any color."'
+expected=$(printf "%s" "$gry${_red}The \"f\"orce switch bypasses SHOUT_DISABLED. Switches go before any color.$_res")
 run "$test" "$expected"
 
 test='shout fa This is a positional arg log using the \"a\" switch.'
@@ -118,8 +117,8 @@ printf "%s\n" "${tut}They are unknown level logs."
 printf "%s\n" "${tut}Unknown level logs will not be filtered by log level, so they will still pass if logs are enabled or with \"f\"orce..."
 printf "%s\n" "${tut}Let us see how it goes$_res"
 
-printf "%s\n" "% SHOUT_ENABLED=1 SHOUT_LEVEL=5"
-SHOUT_ENABLED=1 SHOUT_LEVEL=5
+printf "%s\n" "% SHOUT_DISABLED=\"\" SHOUT_LEVEL=5"
+SHOUT_DISABLED="" SHOUT_LEVEL=5
 
 test='shout 5 This is a level 5 log, it can pass!'
 expected="${gry}This is a level 5 log, it can pass!$res"
