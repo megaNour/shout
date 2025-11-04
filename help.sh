@@ -22,15 +22,15 @@ Multi-modal logger with switches log level in a single ${_yel}OPT_STRING$_res.
 ${_mag}Philosophy:$_res
   - No background process
   - No runtime    ${_gry}# shout is part of your shell process$_res
-  - No subprocess ${_gry}# no | no & no JIT values ${_gry}# no \$(whatevere)$_res
+  - No subprocess ${_gry}# no '|' no '&' no '\$(whatever)'$_res
 
 ${_mag}Usage:$_res
   shout ${_yel}OPT_STRING$_res [ARGUMENT...] $_gry# line mode$_res
   command | shout ${_yel}OPT_STRING$_res     $_gry# stream mode$_res
 
 ${_mag}Environments:$_res
-  $_gry# log levels.
   ${_yel}SHOUT_ENABLED$_res            global logging switch. Can be bypassed with ${_yel}f$_res opt.
+  $_gry# Log levels.
   ${_yel}SHOUT_LEVEL$_res              the minimal log level accepted. Can be bypassed with ${_yel}f$_res opt.
   ${_yel}SHOUT_KNOWN_LEVEL_ONLY$_res   discards logs with no level. Can be bypassed with ${_yel}f$_res opt.
   $_gry# Default colors. All grey. Set them to null to use your regular text color.
@@ -53,14 +53,14 @@ ${_mag}Supported log modes:$_res
 
 ${_mag}Examples:$_res
   ${_gry}# see much more examples by running the tests with $_yel\`shoutctl test\`${_res}
-  ${_gry}# This prints a red log (and resets colors) in red to stderr even if SHOUT_ENABLED is off${_res}
+  ${_gry}# This prints a red log (and resets colors) in red to stderr even if ${_yel}SHOUT_DISABLED$_gry is set.${_res}
   shout f "\${_red}The pizza is blue."
-  ${_gry}# This prints in grey to stderr (and resets colors) if SHOUT_LEVEL <= 5 and forwards to myNextProcess$_res
+  ${_gry}# This prints in grey to stderr (and resets colors) if ${_yel}SHOUT_LEVEL$_gry <= 5 and forwards to myNextProcess$_res
   echo "streamed text" | shout 5 | myNextProcess
 
 ${_mag}Included colors:$_res $_gry(you can define and pass your own...)$_def
-foregrounds:  $_gry\$_gry $_red \$_red  $_grn\$_grn  $_yel\$_yel  $_blu\$_blu  $_mag\$_mag  $_cya\$cya  $_whi\$_whi  $_def\$_def$_def $_DEF$_bla \$_bla $_res
-backgrounds: $_GRY \$_GRY $_RED \$_RED $_GRN$_bla \$_GRN $_YEL \$_YEL $_BLU \$_BLU $_MAG \$_MAG $_CYA \$CYA $_WHI \$_WHI $_DEF \$_DEF $_BLA$_def \$_BLA $_res
-modifiers:   $_rev \$_rev $_REV \$_REV  $_bol\$_bol$_gry # reverse, noreverse, bold$_res
+foregrounds:  $_gry\$_gry $_red \$_red  $_grn\$_grn  $_yel\$_yel  $_blu\$_blu  $_mag\$_mag  $_cya\$_cya  $_whi\$_whi  $_def\$_def$_def $_DEF$_bla \$_bla $_res
+backgrounds: $_GRY \$_GRY $_RED \$_RED $_GRN$_bla \$_GRN $_YEL \$_YEL $_BLU \$_BLU $_MAG \$_MAG $_CYA \$_CYA $_WHI \$_WHI $_DEF \$_DEF $_BLA$_def \$_BLA $_res
+modifiers:   $_rev \$_rev $_REV \$_REV  $_bol\$_bol$_res$_gry # reverse, noreverse, bold$_res
 finally:      \$_res$_gry # resets everything.$_res
 EOF

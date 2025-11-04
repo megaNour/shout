@@ -38,15 +38,15 @@ Multi-modal logger with switches log level in a single OPT_STRING.
 Philosophy:
   - No background process
   - No runtime    # shout is part of your shell process
-  - No subprocess # no | no & no JIT values # no $(whatevere)
+  - No subprocess # no '|' no '&' no '$(whatever)'
 
 Usage:
   shout OPT_STRING [ARGUMENT...] # line mode
   command | shout OPT_STRING     # stream mode
 
 Environments:
-  # log levels.
   SHOUT_ENABLED            global logging switch. Can be bypassed with f opt.
+  # Log levels.
   SHOUT_LEVEL              the minimal log level accepted. Can be bypassed with f opt.
   SHOUT_KNOWN_LEVEL_ONLY   discards logs with no level. Can be bypassed with f opt.
   # Default colors. All grey. Set them to null to use your regular text color.
@@ -75,9 +75,9 @@ Examples:
   echo "streamed text" | shout 5 | myNextProcess
 
 Included colors: (you can define and pass your own...)
-foregrounds:  $_gry  $_red  $_grn  $_yel  $_blu  $_mag  $cya  $_whi  $_def  $_bla
-backgrounds:  $_GRY  $_RED  $_GRN  $_YEL  $_BLU  $_MAG  $CYA  $_WHI  $_DEF  $_BLA
-modifiers:    $_bol # bold combines with any color
+foregrounds:  $_gry  $_red  $_grn  $_yel  $_blu  $_mag  $_cya  $_whi  $_def  $_bla
+backgrounds:  $_GRY  $_RED  $_GRN  $_YEL  $_BLU  $_MAG  $_CYA  $_WHI  $_DEF  $_BLA
+modifiers:    $_rev  $_REV  $_bol # reverse, noreverse, bold
 finally:      $_res # resets everything.
 ```
 
@@ -194,7 +194,6 @@ Here! Have a Palestine flag with the "p" switch!
 ██◤
 █◤
 ◤
-
 ```
 
 ## TODO
