@@ -6,8 +6,6 @@ benchShoutLines() {
   i=0
   while [ "$i" -lt 1000 ]; do
     i=$((i + 1))
-    shout "" "$_red$i"
-
     shout "" "This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING."
 
     shout "" "This is a red line log. You can change the color."
@@ -40,8 +38,6 @@ benchPrintf() {
   i=0
   while [ "$i" -lt 1000 ]; do
     i=$((i + 1))
-    printf "%s\n" "$_red$i" 1>&2
-
     printf "%s\n" "This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING." 1>&2
 
     printf "%s\n" "This is a red line log. You can change the color." 1>&2
@@ -66,9 +62,16 @@ benchPrintf() {
 
     printf "%s\n" "Now the terrible truth: multiline strings will end up on one line." 1>&2
 
-    printf "%s" "This is an unknown level log, it cannot pass anymore!" 1>&2
+    printf "%s\n" "This is an unknown level log, it cannot pass anymore!" 1>&2
   done
 }
 
-time benchShoutLines 2>/dev/null
-time benchPrintf 2>/dev/null
+if [ "$1" ]; then
+  benchShoutLines
+  echo
+  echo benching shout
+else
+  benchPrintf
+  echo
+  echo benching printf
+fi
