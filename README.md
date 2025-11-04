@@ -54,7 +54,7 @@ Environments:
   SHOUT_ARGS_COLOR         default args listing color.
   SHOUT_STREAM_COLOR       default stream color.
 
-OPT_STRING: [LOG_LEVEL|SWITCH...] # see predefined colors at the bottom
+OPT_STRING: '[LOG_LEVEL][SWITCH...]' # see predefined colors at the bottom
 
 SWITCH: # combinable
   a: pretty print positional arguments.
@@ -89,8 +89,6 @@ on your terminal's theme.
 So you can just run them (~instant):
 
 ```sh
-% shoutctl test # run the tests, get colored examples fitting your terminal.
-# all lines above are test outputs, you don't type that. Just read through.
 % shout "" "This is a default grey log. Notice the empty OPT_STRING."
 This is a default grey log. Notice the empty OPT_STRING.
 Test passed!
@@ -111,9 +109,9 @@ Test passed!
 This is printed in grey :)
 Test passed!
 
-% unset SHOUT_ENABLED
-% shout "f" "${_red}The \"f\"orce switch bypasses SHOUT_ENABLED. Switches go before any color."
-The "f"orce switch bypasses SHOUT_ENABLED. Switches go before any color.
+% SHOUT_DISABLED=1
+% shout "f" "${_red}The \"f\"orce switch bypasses SHOUT_DISABLED. Switches go before any color."
+The "f"orce switch bypasses SHOUT_DISABLED. Switches go before any color.
 Test passed!
 
 % shout fa This is a positional arg log using the \"a\" switch.
@@ -142,7 +140,7 @@ Did you notice logs did not have a level in previous tests?
 They are unknown level logs.
 Unknown level logs will not be filtered by log level, so they will still pass if logs are enabled or with "f"orce...
 Let us see how it goes
-% SHOUT_ENABLED=1 SHOUT_LEVEL=5
+% SHOUT_DISABLED="" SHOUT_LEVEL=5
 % shout 5 This is a level 5 log, it can pass!
 This is a level 5 log, it can pass!
 Test passed!
@@ -151,15 +149,7 @@ Test passed!
 
 Test passed!
 
-% shout a5 "By the way:" "Switches and log level can be written in any order." "Just remember:" "- Only the first number is a log level!" "- The colors are always last!"
-$1: By the way:
-$2: Switches and log level can be written in any order.
-$3: Just remember:
-$4: - Only the first number is a log level!
-$5: - The colors are always last!
-Test passed!
-
-% shout "" Now the terrible truth:\
+% shout f Now the terrible truth:\
  multiline strings will end up on one line.
 Now the terrible truth: multiline strings will end up on one line.
 Test passed!

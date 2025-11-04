@@ -38,7 +38,7 @@ ${_mag}Environments:$_res
   ${_yel}SHOUT_ARGS_COLOR$_res         default args listing color.
   ${_yel}SHOUT_STREAM_COLOR$_res       default stream color.
 
-${_mag}OPT_STRING:$_res ${_yel}[LOG_LEVEL|SWITCH...]$_res $_gry# see predefined colors at the bottom$_res
+${_mag}OPT_STRING:$_res ${_yel}'[LOG_LEVEL][SWITCH...]'$_res $_gry# see predefined colors at the bottom$_res
 
 ${_mag}SWITCH:$_res ${_gry}# combinable
   $_bol${_yel}a$_res: pretty print positional arguments.
