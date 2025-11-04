@@ -2,26 +2,26 @@
 
 shout() {
   unset _shout_level _shout_force _shout_silently _shout_stream
-  optstring=$1
+  _shout_optstring=$1
   if [ "$#" -gt 0 ]; then shift; fi
 
   if [ ! -t 0 ]; then _shout_stream=1; fi
-  case "$optstring" in *f*) _shout_force=1 ;; esac
+  case "$_shout_optstring" in *f*) _shout_force=1 ;; esac
   if [ "$SHOUT_DISABLED" ] && [ -z "$_shout_force" ]; then _shout_silently=1; fi
 
   if [ -z "$_shout_force" ]; then # further checks needed on log level
-    _shout_level=${optstring%%[^0-9]*}
+    _shout_level=${_shout_optstring%%[^0-9]*}
     if [ -n "$SHOUT_KNOWN_LEVEL_ONLY" ] && [ -z "$_shout_level" ]; then
       _shout_silently=1
     else
-      if [ $((${SHOUT_LEVEL:-0} - ${_shout_level:-0})) -gt 0 ]; then # and it's inferior to SHOUT_LEVEL
+      if [ $((${SHOUT_LEVEL:-0} - ${_shout_level:-0})) -gt 0 ]; then
         _shout_silently=1
       fi
     fi
   fi
 
   if [ -z "$_shout_silently" ] && [ -z "$_shout_stream" ]; then # line mode
-    case "$optstring" in *a*) _shoutArgs "$@" ;; *) _shoutLine "$*" ;; esac
+    case "$_shout_optstring" in *a*) _shoutArgs "$@" ;; *) _shoutLine "$*" ;; esac
   elif [ -n "$_shout_stream" ]; then # stream mode
     if [ -n "$_shout_silently" ]; then
       cat # just passthrough
