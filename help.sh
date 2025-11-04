@@ -61,6 +61,6 @@ ${_mag}Examples:$_res
 ${_mag}Included colors:$_res $_gry(you can define and pass your own...)$_def
 foregrounds:  $_gry\$_gry $_red \$_red  $_grn\$_grn  $_yel\$_yel  $_blu\$_blu  $_mag\$_mag  $_cya\$cya  $_whi\$_whi  $_def\$_def$_def $_DEF$_bla \$_bla $_res
 backgrounds: $_GRY \$_GRY $_RED \$_RED $_GRN$_bla \$_GRN $_YEL \$_YEL $_BLU \$_BLU $_MAG \$_MAG $_CYA \$CYA $_WHI \$_WHI $_DEF \$_DEF $_BLA$_def \$_BLA $_res
-modifiers:    $_bol\$_bol$_gry # bold combines with any color$_res
+modifiers:   $_rev \$_rev $_REV \$_REV  $_bol\$_bol$_gry # reverse, noreverse, bold$_res
 finally:      \$_res$_gry # resets everything.$_res
 EOF

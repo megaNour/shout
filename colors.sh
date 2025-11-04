@@ -1,7 +1,9 @@
 #!/bin/sh
 
-_res="[0m" # reset all
-_bol="[1m" # bold
+_res="[0m"  # reset all
+_bol="[1m"  # bold
+_rev="[7m"  # reverse mode
+_REV="[27m" # noreverse mode
 
 # foregrounds
 _red="[38;5;1m"
