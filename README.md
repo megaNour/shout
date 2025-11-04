@@ -8,26 +8,7 @@ first install `shoutctl`. Then see the [How to Use](#how-to-use) and [Examples](
 
 ```sh
 % ./install.sh # installs shoutctl
-% shoutctl
-eval the whole output of this command: 'eval $(shoutctl source 2>/dev/null)'. These grey lines will not be sourced as they go to stderr.
-. ./colors.sh; . ./libshout.sh%
-% eval $(shoutctl source 2>/dev/null) # silent: eval $(shoutctl source 2>/dev/null)
-% shoutctl [ANYTHING_UNKNOWN|NO_ARG]  # display shoutctl help
-Description:
-  shoutctl - a little helper to interact with shout and source the libs easily.
-
-Usage:
-  shoutctl [COMMAND]
-
-COMMAND:
-  [Pp]alestine      Print the Palestinian flag.
-  help              Print help for libshout.
-  source            Print the command to source libshout.
-  rainbow           Print an indexed rainbow of 256 colors. (no worries. it's compact)
-  [*]               Print this message.
-
-How to use:
-. $(shoutctl source) # that's it! You can shout! (see shoutctl help for details)
+% shoutctl     # will display all you need to know to start
 ```
 
 ## How to Use
@@ -108,6 +89,8 @@ on your terminal's theme.
 So you can just run them (~instant):
 
 ```sh
+% shoutctl test # run the tests, get colored examples fitting your terminal.
+# all lines above are test outputs, you don't type that. Just read through.
 % shout "" "This is a default grey log. Notice the empty OPT_STRING."
 This is a default grey log. Notice the empty OPT_STRING.
 Test passed!
