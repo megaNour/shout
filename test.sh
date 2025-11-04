@@ -128,15 +128,7 @@ test='shout 4 This is a level 4 log, it cannot display!'
 expected=
 run "$test" "$expected"
 
-test='shout a5 "By the way:" "Switches and log level can be written in any order." "Just remember:" "- Only the first number is a log level!" "- The colors are always last!"'
-expected="$gry\$1: By the way:$res
-$gry\$2: Switches and log level can be written in any order.$res
-$gry\$3: Just remember:$res
-$gry\$4: - Only the first number is a log level!$res
-$gry\$5: - The colors are always last!$res"
-run "$test" "$expected"
-
-test='shout "" Now the terrible truth:\
+test='shout f Now the terrible truth:\
  multiline strings will end up on one line.'
 expected=$(
   printf '%s' "${gry}Now the terrible truth: multiline strings will end up on one line.$res"

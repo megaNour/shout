@@ -11,7 +11,6 @@ shout() {
 
   if [ -z "$_shout_force" ]; then                                         # further checks needed on log level
     _shout_level=${optstring%%[^0-9]*}                                    # the first number only is the level
-    _shout_level=${_shout_level#*[^0-9]}                                  # it can be before or after switches
     if { [ -n "$SHOUT_KNOWN_LEVEL_ONLY" ] && [ -z "$_shout_level" ]; } || # check if level-less logs are rejected or...
       { [ -n "$_shout_level" ] &&                                         # if there is a level
         [ "$_shout_level" -gt 0 ] 2>/dev/null &&                          # and it's > 0
