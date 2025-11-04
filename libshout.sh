@@ -5,30 +5,29 @@ shout() {
   _shout_optstring=$1
   if [ "$#" -gt 0 ]; then shift; fi
 
-  if [ ! -t 0 ]; then _shout_stream=1; fi
-  case "$_shout_optstring" in *f*) _shout_force=1 ;; esac
-  if [ "$SHOUT_DISABLED" ] && [ -z "$_shout_force" ]; then _shout_silently=1; fi
+  case "$_shout_optstring" in *f*) _shout_force=1 ;; *) _shoutCheckLevel ;; esac
 
-  if [ -z "$_shout_force" ]; then # further checks needed on log level
-    _shout_level=${_shout_optstring%%[^0-9]*}
-    if [ -n "$SHOUT_KNOWN_LEVEL_ONLY" ] && [ -z "$_shout_level" ]; then
-      _shout_silently=1
-    else
-      if [ $((${SHOUT_LEVEL:-0} - ${_shout_level:-0})) -gt 0 ]; then
-        _shout_silently=1
-      fi
-    fi
-  fi
-
-  if [ -z "$_shout_silently" ] && [ -z "$_shout_stream" ]; then # line mode
-    case "$_shout_optstring" in *a*) _shoutArgs "$@" ;; *) _shoutLine "$*" ;; esac
-  elif [ -n "$_shout_stream" ]; then # stream mode
+  if [ ! -t 0 ]; then # stream mode
     if [ -n "$_shout_silently" ]; then
       cat # just passthrough
     else
-      if [ -n "$SHOUT_STREAM_COLOR" ]; then printf '%s' "$SHOUT_STREAM_COLOR" >&2; fi
+      printf '%s' "$SHOUT_STREAM_COLOR" >&2
       tee /dev/stderr
-      printf '%s' "$_res" >&2 # Never spare it, maybe there are custom colors... Reset is guaranteed.
+      printf '%s' "$_res" >&2
+    fi
+  elif [ -z "$_shout_silently" ]; then # line mode
+    case "$_shout_optstring" in *a*) _shoutArgs "$@" ;; *) _shoutLine "$*" ;; esac
+  fi
+}
+
+_shoutCheckLevel() {
+  if [ -n "$SHOUT_DISABLED" ]; then
+    _shout_silently=1
+  else
+    _shout_level=${_shout_optstring%%[^0-9]*}
+    if [ $((${SHOUT_LEVEL:-0} - ${_shout_level:-0})) -gt 0 ] ||
+      { [ -n "$SHOUT_KNOWN_LEVEL_ONLY" ] && [ -z "$_shout_level" ]; }; then
+      _shout_silently=1
     fi
   fi
 }

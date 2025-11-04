@@ -4,7 +4,7 @@ eval "$(shoutctl source 2>/dev/null)"
 
 benchShoutLines() {
   i=0
-  while [ "$i" -lt 1000 ]; do
+  while [ "$i" -lt 10000 ]; do
     i=$((i + 1))
     shout "" "This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING."
 
@@ -36,7 +36,7 @@ benchShoutLines() {
 
 benchPrintf() {
   i=0
-  while [ "$i" -lt 1000 ]; do
+  while [ "$i" -lt 10000 ]; do
     i=$((i + 1))
     printf "%s\n" "This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING." 1>&2
 
