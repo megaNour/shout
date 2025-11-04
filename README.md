@@ -57,8 +57,7 @@ Multi-modal logger with switches log level in a single OPT_STRING.
 Philosophy:
   - No background process
   - No runtime    # shout is part of your shell process
-  - No subprocess # ok except cat | tee in stream-mode
-  - No JIT values # no $(whatevere)
+  - No subprocess # no | no & no JIT values # no $(whatevere)
 
 Usage:
   shout OPT_STRING [ARGUMENT...] # line mode
@@ -148,8 +147,12 @@ $10: switch.
 Test passed!
 
 % SHOUT_STREAM_COLOR=$_RED$_bla # there is a stream color defaulting to SHOUT_COLOR that you can utilize.
-% printf "%s" "This is streamed to stdin and stderr. Thus, you see it twice." | shout f
-This is streamed to stdin and stderr. Thus, you see it twice.This is streamed to stdin and stderr. Thus, you see it twice.
+% printf "%s" "This is streamed to stdout and stderr. Thus, you see it twice." | shout f
+This is streamed to stdout and stderr. Thus, you see it twice.This is streamed to stdout and stderr. Thus, you see it twice.
+Test passed!
+
+% printf "%s" "This is streamed to stdout only. Thus, you see it once." | shout
+This is streamed to stdout only. Thus, you see it once.
 Test passed!
 
 Did you notice logs did not have a level in previous tests?
@@ -208,6 +211,7 @@ Here! Have a Palestine flag with the "p" switch!
 ██◤
 █◤
 ◤
+
 ```
 
 ## TODO

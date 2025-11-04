@@ -105,8 +105,12 @@ run "$test" "$expected"
 printf '%s\n' "% SHOUT_STREAM_COLOR=\$_RED\$_bla ${tut}# there is a stream color defaulting to ${yel}SHOUT_COLOR$tut that you can utilize.$res"
 SHOUT_STREAM_COLOR=$_RED$_bla
 
-test='printf "%s" "This is streamed to stdin and stderr. Thus, you see it twice." | shout f'
-expected="$RED${bla}This is streamed to stdin and stderr. Thus, you see it twice.This is streamed to stdin and stderr. Thus, you see it twice.$res"
+test='printf "%s" "This is streamed to stdout and stderr. Thus, you see it twice." | shout f'
+expected="$RED${bla}This is streamed to stdout and stderr. Thus, you see it twice.This is streamed to stdout and stderr. Thus, you see it twice.$res"
+run "$test" "$expected"
+
+test='printf "%s" "This is streamed to stdout only. Thus, you see it once." | shout'
+expected="This is streamed to stdout only. Thus, you see it once."
 run "$test" "$expected"
 
 printf "%s\n" "${tut}Did you notice logs did not have a level in previous tests?"

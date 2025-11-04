@@ -22,8 +22,7 @@ Multi-modal logger with switches log level in a single ${_yel}OPT_STRING$_res.
 ${_mag}Philosophy:$_res
   - No background process
   - No runtime    ${_gry}# shout is part of your shell process$_res
-  - No subprocess ${_gry}# ok except cat | tee in stream-mode$_res
-  - No JIT values ${_gry}# no \$(whatevere)$_res
+  - No subprocess ${_gry}# no | no & no JIT values ${_gry}# no \$(whatevere)$_res
 
 ${_mag}Usage:$_res
   shout ${_yel}OPT_STRING$_res [ARGUMENT...] $_gry# line mode$_res
