@@ -2,15 +2,40 @@
 
 shout is just a `POSIX` script. Source it, use it. No daemon, no runtime, no...
 
+## Setup
+
+first install `shoutctl`. Then see the [How to Use](#how-to-use) and [Examples](#examples-to-be-run-in-your-own-terminal-for-colors)sections.
+
+```sh
+% ./install.sh # installs shoutctl
+% shoutctl
+eval the whole output of this command: 'eval $(shoutctl source 2>/dev/null)'. These grey lines will not be sourced as they go to stderr.
+. ./colors.sh; . ./libshout.sh%
+% eval $(shoutctl source 2>/dev/null) # silent: eval $(shoutctl source 2>/dev/null)
+% shoutctl [ANYTHING_UNKNOWN|NO_ARG]  # display shoutctl help
+Description:
+  shoutctl - a little helper to interact with shout and source the libs easily.
+
+Usage:
+  shoutctl [COMMAND]
+
+COMMAND:
+  [Pp]alestine      Print the Palestinian flag.
+  help              Print help for libshout.
+  source            Print the command to source libshout.
+  rainbow           Print an indexed rainbow of 256 colors. (no worries. it's compact)
+  [*]               Print this message.
+
+How to use:
+. $(shoutctl source) # that's it! You can shout! (see shoutctl help for details)
+```
+
 ## How to Use
 
 The following will explain what the `OPT_STRING` is and which values it takes.
 
 ```sh
-% ./shout.sh help # Any argument will display help. This avoids printing when sourcing.
-% . ./shout.sh # Source it.
-% shout h # The `h` switch also displays help.
-# Should look like that but with colors!
+% shoutctl help # display the libshoutctl help. Should look like below but with colors!
                                 :
              .                 t#,    :
             ;W.    .          ;##W.   Ef
@@ -27,7 +52,7 @@ The following will explain what the `OPT_STRING` is and which values it takes.
     ,                                 :         :
                          v0.1.0
 
-Multi-modal logger taking switches log level and colors in a single OPT_STRING.
+Multi-modal logger with switches log level in a single OPT_STRING.
 
 Philosophy:
   - No background process
@@ -36,50 +61,37 @@ Philosophy:
   - No JIT values # no $(whatevere)
 
 Usage:
-  ./shout.sh [ANYTHING]          # print this message
-  . ./shout.sh                   # source the lib
   shout OPT_STRING [ARGUMENT...] # line mode
   command | shout OPT_STRING     # stream mode
 
-Environments: You can use the following
-  SHOUT_ENABLED - global logging switch. Can be bypassed with f opt.
-  SHOUT_LEVEL - the minimal log level accepted. Can be bypassed with f opt.
-  SHOUT_KNOWN_LEVEL_ONLY - discards logs with no level. Can be bypassed with f opt.
-  SHOUT_COLOR - default color is always appended, provided or not.
-    Set to null to disable. However, if you unset it, it will fallback to grey.
-    You can ignore it and put your own custom colors in your logs when you want.
-  SHOUT_ARGS_COLOR - default args listing color.
-    Set to null to disable. However, if you unset it, it will fallback to grey.
-  SHOUT_STREAM_COLOR - default stream color.
-    Set to null to disable. However, if you unset it, it will fallback to grey.
-
+Environments:
+  # log levels.
+  SHOUT_ENABLED            global logging switch. Can be bypassed with f opt.
+  SHOUT_LEVEL              the minimal log level accepted. Can be bypassed with f opt.
+  SHOUT_KNOWN_LEVEL_ONLY   discards logs with no level. Can be bypassed with f opt.
+  # Default colors. All grey. Set them to null to use your regular text color.
+  SHOUT_COLOR              default color is always appended, provided or not.
+  SHOUT_ARGS_COLOR         default args listing color.
+  SHOUT_STREAM_COLOR       default stream color.
 
 OPT_STRING: [LOG_LEVEL|SWITCH...] # see predefined colors at the bottom
 
 SWITCH: # combinable
-  h: display this message
-  p: display Palestine flag.
-  r: display 256 colors with their index. (no worries, it is compact)
-     Not all those colors are predefined. This is just a visual help for defining your own.
-     Predefined colors are at the bottom.
   a: pretty print positional arguments.
   f: force print to stderr (i.e. bypass SHOUT_ENABLED)
 
 LOG_LEVEL: # single number
   > 0 integer indicating the criticity of your log. It is the first number found in your OPT_STRING.
 
-COLOR: # combinable
-  Color sequences are passed at the end of the OPT_STRING. They must be of the form starting with "^[".
-  Preset colors are included. # See at the bottom
-
 Supported log modes:
   - line-mode:      prints "$@" to stderr after shifting the optstring.
   - stream-mode:    forwards stdin to stdout and tees a colorized copy to stderr.
 
 Examples:
-  # This prints red logs in red to stderr even if SHOUT_ENABLED is off
-  shout "f.$_red"
-  # This prints in grey to stderr if SHOUT_LEVEL <= 5 and forwards to myNextProcess
+  # see much more examples by running the tests with `shoutctl test`
+  # This prints a red log (and resets colors) in red to stderr even if SHOUT_ENABLED is off
+  shout f "${_red}The pizza is blue."
+  # This prints in grey to stderr (and resets colors) if SHOUT_LEVEL <= 5 and forwards to myNextProcess
   echo "streamed text" | shout 5 | myNextProcess
 
 Included colors: (you can define and pass your own...)
@@ -97,12 +109,11 @@ on your terminal's theme.
 So you can just run them (~instant):
 
 ```sh
-% ./test.sh # Runs the tests outputing example commands and outputs.
-# The `%` prompts are symbolic of user prompt. The `$` are used in `shout` outputs.
-% shout "" "This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING."
-This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING.
+% shout "" "This is a default grey log. Notice the empty OPT_STRING."
+This is a default grey log. Notice the empty OPT_STRING.
 Test passed!
 
+Important! always pass the OPT_STRING to avoid your first arg to be mistaken with it.
 % SHOUT_COLOR=$_red # Let's define the default color to red.
 % shout "" "${_red}This is a red line log.$_grn You$_yel can$_blu change$_mag the$_cya color$_whi by$_def inserting your own escape sequences. They will be preserved."
 This is a red line log. You can change the color by inserting your own escape sequences. They will be preserved.
@@ -172,14 +183,13 @@ Test passed!
 
 Test passed!
 
-
 Here! Have a rainbow with the "r" switch!
-% shout r
+% shoutctl rainbow
 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250 251 252 253 254 255
 
 Victory! You passed all the tests!
 Here! Have a Palestine flag with the "p" switch!
-% shout p
+% shoutctl palestine
 ◣
 █◣
 ██◣

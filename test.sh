@@ -2,7 +2,9 @@
 
 set -e
 
-. ./shout.sh
+ENTRY=$(dirname "$0")
+. "$ENTRY/colors.sh"
+. "$ENTRY/libshout.sh"
 SHOUT_ENABLED=1
 
 res="[0m"
@@ -53,9 +55,11 @@ run() {
   unset test expected actual
 }
 
-test='shout "" "This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING."'
-expected=$(printf "%s" "${gry}This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING.$_res")
+test='shout "" "This is a default grey log. Notice the empty OPT_STRING."'
+expected=$(printf "%s" "${gry}This is a default grey log. Notice the empty OPT_STRING.$_res")
 run "$test" "$expected"
+
+printf '%s\n' "$RED${bla}Important!$res$tut always pass the OPT_STRING to avoid your first arg to be mistaken with it.$_res"
 
 printf '%s\n' "% SHOUT_COLOR=\$_red $tut# Let's define the default color to red.$_res"
 SHOUT_COLOR=$_red
@@ -143,11 +147,11 @@ test='shout "" This is an unknown level log, it cannot pass anymore!'
 expected=
 run "$test" "$expected"
 
-printf '\n%s\n' "${tut}Here! Have a rainbow with the \"r\" switch!$_res"
-printf '%s\n' "% shout r"
-shout r
+printf '%s\n' "${tut}Here! Have a rainbow with the \"r\" switch!$_res"
+printf '%s\n' "% shoutctl rainbow"
+shoutctl rainbow
 printf '\n'
 printf '%s\n' "$GRN${bla}Victory! You passed all the tests!$res"
 printf '%s\n' "${tut}Here! Have a Palestine flag with the \"p\" switch!$_res"
-printf '%s\n' "% shout p"
-shout p
+printf '%s\n' "% shoutctl palestine"
+shoutctl palestine
