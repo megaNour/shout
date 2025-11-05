@@ -55,8 +55,8 @@ run() {
   unset test expected actual
 }
 
-test='shout 1 "This is a default grey log. $_CYA${_bla}Notice$_res$_gry 1 is the log level, which is mandatory with simple shout."'
-expected=$(printf "%s" "${gry}This is a default grey log. $CYA${bla}Notice$res$gry 1 is the log level, which is mandatory with simple shout.$_res")
+test='shout 0 "This is a default grey log. $_CYA${_bla}Notice$_res$_gry 0 is the (most critical) log level, which is mandatory with simple shout."'
+expected=$(printf "%s" "${gry}This is a default grey log. $CYA${bla}Notice$res$gry 0 is the (most critical) log level, which is mandatory with simple shout.$_res")
 run "$test" "$expected"
 
 printf '%s\n' "% SHOUT_COLOR=\$_red $tut# Let's define the default color to red.$_res"
@@ -121,7 +121,7 @@ test='shout 5 This is a level 5 log, it can pass!'
 expected="${gry}This is a level 5 log, it can pass!$res"
 run "$test" "$expected"
 
-test='shout 4 This is a level 4 log, it cannot display, just like for shouta and shouts!'
+test='shout 6 This is a level 6 log, it cannot display, just like for shouta and shouts!'
 expected=
 run "$test" "$expected"
 

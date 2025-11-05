@@ -26,7 +26,7 @@ shouts() {
 }
 
 _shoutCheckLevel() {
-  { [ -n "$SHOUT_DISABLED" ] || [ "$((SHOUT_LEVEL - _shout_level))" -gt 0 ]; } && return 1 || :
+  { [ -n "$SHOUT_DISABLED" ] || [ "$((SHOUT_LEVEL - _shout_level))" -lt 0 ]; } && return 1 || :
 }
 
 shoutf() { # log positional arguments inline
