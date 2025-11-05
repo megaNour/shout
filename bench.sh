@@ -2,7 +2,7 @@
 
 eval "$(shoutctl source 2>/dev/null)"
 
-ITERATIONS=10000
+ITERATIONS=100000
 
 _shout_bench_loop() {
   echo "$@"
