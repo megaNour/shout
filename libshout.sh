@@ -11,12 +11,10 @@ shout() {
     if [ -n "$_shout_silently" ]; then
       cat # just passthrough
     else
-      printf '%s' "$SHOUT_STREAM_COLOR" >&2
-      tee /dev/stderr
-      printf '%s' "$_res" >&2
+      shoutsf
     fi
   elif [ -z "$_shout_silently" ]; then # line mode
-    case "$_shout_optstring" in *a*) _shoutArgs "$@" ;; *) _shoutLine "$*" ;; esac
+    case "$_shout_optstring" in *a*) shoutaf "$@" ;; *) shoutf "$*" ;; esac
   fi
 }
 
@@ -32,14 +30,20 @@ _shoutCheckLevel() {
   fi
 }
 
-_shoutArgs() { # log positional arguments indexed
+shoutf() { # log positional arguments inline
+  printf "%s%s%s\n" "$SHOUT_COLOR" "$*" "$_res" >&2
+}
+
+shoutaf() { # log positional arguments indexed
   _shout_arg_i=0
   for arg in "$@"; do
     _shout_arg_i=$((_shout_arg_i + 1))
-    SHOUT_COLOR=$SHOUT_ARGS_COLOR _shoutLine "\$$_shout_arg_i: $arg"
+    SHOUT_COLOR=$SHOUT_ARGS_COLOR shoutf "\$$_shout_arg_i: $arg"
   done
 }
 
-_shoutLine() { # log positional arguments inline
-  printf "%s%s%s\n" "$SHOUT_COLOR" "$*" "$_res" >&2
+shoutsf() {
+  printf '%s' "$SHOUT_STREAM_COLOR" >&2
+  tee /dev/stderr
+  printf '%s' "$_res" >&2
 }

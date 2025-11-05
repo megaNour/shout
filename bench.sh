@@ -16,6 +16,10 @@ _shout_bench_shout() {
   shout "" "This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING."
 }
 
+_shout_bench_shoutf() {
+  shoutf "This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING."
+}
+
 _shout_bench_printf() {
   printf "%s\n" "${_gry}This is a grey log. Log arguments inline in grey. Notice the empty OPT_STRING.$_res" 1>&2
 }
