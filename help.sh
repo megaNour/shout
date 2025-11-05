@@ -17,46 +17,39 @@ ${_grn}    EG.        ii   ii  ${_red}        t     EL       fE
 ${_grn}    ,                   ${_red}              :         :
                         ${_RED} ${_bol}${_def}v0.1.0 ${_res}
 
-Multi-modal logger with switches log level in a single ${_yel}OPT_STRING${_res}.
+Multi-modal printf-speed logger with switches log level in a single ${_yel}OPT_STRING${_res}.
 
 ${_mag}Philosophy:${_res}
   - No background process
   - No runtime    ${_gry}# shout is part of your shell process${_res}
   - No subprocess ${_gry}# no '|' no '&' no '\$(whatever)'${_res}
+  - No bashism    ${_gry}# POSIX syntax${_res}
+  - No smart options ${_gry}# static optimization.${_res}
 
 ${_mag}Usage:${_res}
-  shout ${_yel}OPT_STRING${_res} [ARGUMENT...] ${_gry}# line mode${_res}
-  command | shout ${_yel}OPT_STRING${_res}     ${_gry}# stream mode${_res}
+  shout${_yel}[as]${_res}f [ARGUMENT...]       ${_gry}# force log${_res}
+  shout ${_yel}LOG_LEVEL${_res} [ARGUMENT...]  ${_gry}# line mode${_res}
+  shouta ${_yel}LOG_LEVEL${_res} [ARGUMENT...] ${_gry}# args mode${_res}
+  COMMAND | shouts ${_yel}LOG_LEVEL${_res}     ${_gry}# stream mode${_res}
 
 ${_mag}Environments:${_res}
   ${_gry}# Log levels.
-  ${_yel}SHOUT_DISABLED${_res}           global logging switch. Can be bypassed with ${_yel}f${_res} opt.
   ${_yel}SHOUT_LEVEL${_res}              the minimal log level accepted. Can be bypassed with ${_yel}f${_res} opt.
-  ${_yel}SHOUT_KNOWN_LEVEL_ONLY${_res}   discards logs with no level. Can be bypassed with ${_yel}f${_res} opt.
+  ${_yel}SHOUT_DISABLED${_res}           global logging switch. Can be bypassed with ${_yel}f${_res} opt.
   ${_gry}# Default colors. All grey. Set them to null to use your regular text color.
   ${_yel}SHOUT_COLOR${_res}              default color is always appended, provided or not.
   ${_yel}SHOUT_ARGS_COLOR${_res}         default args listing color.
   ${_yel}SHOUT_STREAM_COLOR${_res}       default stream color.
 
-${_mag}OPT_STRING:${_res} ${_yel}'[LOG_LEVEL][SWITCH...]'${_res} ${_gry}# see predefined colors at the bottom${_res}
-
-${_mag}SWITCH:${_res} ${_gry}# combinable
-  ${_bol}${_yel}a${_res}: pretty print positional arguments.
-  ${_bol}${_yel}f${_res}: force print to stderr (i.e. bypass ${_yel}SHOUT_DISABLED${_res})
-
-${_mag}LOG_LEVEL:${_res} ${_gry}# single number${_res}
-  > 0 integer indicating the criticity of your log. It is the first number found in your ${_yel}OPT_STRING${_res}.
-
-${_mag}Supported log modes:${_res}
-  - ${_yel}line-mode${_res}:      prints "\$@" to stderr after shifting the optstring.
-  - ${_yel}stream-mode${_res}:    forwards stdin to stdout and tees a colorized copy to stderr.
+${_mag}LOG_LEVEL:${_res}
+  Only logs lower or equal to ${_yel}SHOUT_LEVEL${_res} will display. (unless forced)
 
 ${_mag}Examples:${_res}
   ${_gry}# see much more examples by running the tests with ${_yel}\`shoutctl test\`${_res}
   ${_gry}# This prints a red log (and resets colors) in red to stderr even if ${_yel}SHOUT_DISABLED${_gry} is set.${_res}
-  shout f "\${_red}The pizza is blue."
-  ${_gry}# This prints in grey to stderr (and resets colors) if ${_yel}SHOUT_LEVEL${_gry} <= 5 and forwards to myNextProcess${_res}
-  echo "streamed text" | shout 5 | myNextProcess
+  shoutf "\${_red}The pizza is blue."
+  ${_gry}# This prints in grey to stderr (and resets colors) if ${_yel}SHOUT_LEVEL${_gry} >= 5 and forwards to myNextProcess${_res}
+  echo "streamed text" | shouts 5 | myNextProcess
 
 ${_mag}Included colors:${_res} ${_gry}(you can define and pass your own...)${_def}
 foregrounds:  ${_gry}\${_gry} ${_red} \${_red}  ${_grn}\${_grn}  ${_yel}\${_yel}  ${_blu}\${_blu}  ${_mag}\${_mag}  ${_cya}\${_cya}  ${_whi}\${_whi}  ${_def}\${_def}${_def} ${_DEF}${_bla} \${_bla} ${_res}
