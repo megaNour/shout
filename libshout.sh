@@ -1,32 +1,33 @@
 #!/bin/sh
 
 shout() {
-  unset _shout_level _shout_force _shout_silently _shout_stream
-  _shout_optstring=$1
-  if [ "$#" -gt 0 ]; then shift; fi
+  _shout_level=${1:?shout requires a log level. Use shoutf to force.}
+  shift
+  if _shoutCheckLevel; then
+    shoutf "$*"
+  fi
+}
 
-  case "$_shout_optstring" in *f*) _shout_force=1 ;; *) _shoutCheckLevel ;; esac
+shouta() {
+  _shout_level=${1:?shouta requires a log level. Use shoutaf to force.}
+  shift
+  if _shoutCheckLevel; then # line mode
+    shoutaf "$@"
+  fi
+}
 
-  if [ ! -t 0 ]; then # stream mode
-    if [ -n "$_shout_silently" ]; then
-      cat # just passthrough
-    else
-      shoutsf
-    fi
-  elif [ -z "$_shout_silently" ]; then # line mode
-    case "$_shout_optstring" in *a*) shoutaf "$@" ;; *) shoutf "$*" ;; esac
+shouts() {
+  _shout_level=${1:?shouts requires a log level. Use shoutsf to force.} # no need to shift
+  if _shoutCheckLevel; then
+    shoutsf
+  else
+    cat # just passthrough
   fi
 }
 
 _shoutCheckLevel() {
-  if [ -n "$SHOUT_DISABLED" ]; then
-    _shout_silently=1
-  else
-    _shout_level=${_shout_optstring%%[^0-9]*}
-    if [ $((${SHOUT_LEVEL:-0} - ${_shout_level:-0})) -gt 0 ] ||
-      { [ -n "$SHOUT_KNOWN_LEVEL_ONLY" ] && [ -z "$_shout_level" ]; }; then
-      _shout_silently=1
-    fi
+  if [ -n "$SHOUT_DISABLED" ] || [ "$((SHOUT_LEVEL - _shout_level))" -gt 0 ]; then
+    return 1
   fi
 }
 

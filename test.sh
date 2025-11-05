@@ -20,6 +20,7 @@ bla="[38;5;16m"
 tut="[38;5;22m" # tutorial color
 RED="[48;5;1m"
 GRN="[48;5;2m"
+CYA="[48;5;6m"
 
 assert() {
   actual=$(printf '%s' "$1" | od -ta)
@@ -54,68 +55,64 @@ run() {
   unset test expected actual
 }
 
-test='shout "" "This is a default grey log. Notice the empty OPT_STRING."'
-expected=$(printf "%s" "${gry}This is a default grey log. Notice the empty OPT_STRING.$_res")
+test='shout 1 "This is a default grey log. $_CYA${_bla}Notice$_res$_gry 1 is the log level, which is mandatory with simple shout."'
+expected=$(printf "%s" "${gry}This is a default grey log. $CYA${bla}Notice$res$gry 1 is the log level, which is mandatory with simple shout.$_res")
 run "$test" "$expected"
-
-printf '%s\n' "$RED${bla}Important!$res$tut always pass the OPT_STRING to avoid your first arg to be mistaken with it.$_res"
 
 printf '%s\n' "% SHOUT_COLOR=\$_red $tut# Let's define the default color to red.$_res"
 SHOUT_COLOR=$_red
 
-test='shout "" "${_red}This is a red line log.$_grn You$_yel can$_blu change$_mag the$_cya color$_whi by$_def inserting your own escape sequences. They will be preserved."'
+test='shoutf "${_red}This is a red line log.$_grn You$_yel can$_blu change$_mag the$_cya color$_whi by$_def inserting your own escape sequences. They will be preserved."'
 expected=$(printf "%s" "$red${red}This is a red line log.$grn You$yel can$blu change$mag the$cya color$whi by$def inserting your own escape sequences. They will be preserved.$res")
 run "$test" "$expected"
 
 printf '%s\n' "% SHOUT_COLOR= $tut# You can also opt out of default color by setting it to null. Unsetting it would activate back the default fallback!$res"
 SHOUT_COLOR=
 
-test='shout "" "This is printed in regular color :'\''("'
+test='shoutf "This is printed in regular color :'\''("'
 expected=$(printf "%s" "This is printed in regular color :'($res")
 run "$test" "$expected"
 
 printf '%s\n' "% SHOUT_COLOR=\$_gry"
 SHOUT_COLOR=$_gry
 
-test='shout "" "This is printed in grey :)"'
+test='shoutf "This is printed in grey :)"'
 expected=$(printf "%s" "${gry}This is printed in grey :)$res")
 run "$test" "$expected"
 
 printf '%s\n' "% SHOUT_DISABLED=1"
 SHOUT_DISABLED=1
 
-test='shout "f" "${_red}The \"f\"orce switch bypasses SHOUT_DISABLED. Switches go before any color."'
-expected=$(printf "%s" "$gry${_red}The \"f\"orce switch bypasses SHOUT_DISABLED. Switches go before any color.$_res")
+test='shout 1 "${_yel}SHOUT_DISABLED$_gry applies to leveled shout. Not shout?f."'
+expected=
 run "$test" "$expected"
 
-test='shout fa This is a positional arg log using the \"a\" switch.'
+test='shoutaf This is a positional arg log.'
 expected="$gry\$1: This$res
 $gry\$2: is$res
 $gry\$3: a$res
 $gry\$4: positional$res
 $gry\$5: arg$res
-$gry\$6: log$res
-$gry\$7: using$res
-$gry\$8: the$res
-$gry\$9: \"a\"$res
-$gry\$10: switch.$res"
+$gry\$6: log.$res"
 run "$test" "$expected"
 
+test='shouta needs a level as well, but it will not show anyway while SHOUT_DISABLED=1'
+expected=
+run "$test" "$expected"
 printf '%s\n' "% SHOUT_STREAM_COLOR=\$_RED\$_bla ${tut}# there is a stream color defaulting to ${yel}SHOUT_COLOR$tut that you can utilize.$res"
+
 SHOUT_STREAM_COLOR=$_RED$_bla
 
-test='printf "%s" "This is streamed to stdout and stderr. Thus, you see it twice." | shout f'
-expected="$RED${bla}This is streamed to stdout and stderr. Thus, you see it twice.This is streamed to stdout and stderr. Thus, you see it twice.$res"
+test='printf "%s" "This is streamed and forced to stdout and stderr. Thus, you see it twice." | shoutsf'
+expected="$RED${bla}This is streamed and forced to stdout and stderr. Thus, you see it twice.This is streamed and forced to stdout and stderr. Thus, you see it twice.$res"
 run "$test" "$expected"
 
-test='printf "%s" "This is streamed to stdout only. Thus, you see it once." | shout'
-expected="This is streamed to stdout only. Thus, you see it once."
-run "$test" "$expected"
+printf "%s\n" "% SHOUT_DISABLED=\"\" SHOUT_LEVEL=5"
+SHOUT_DISABLED=1
 
-printf "%s\n" "${tut}Did you notice logs did not have a level in previous tests?"
-printf "%s\n" "${tut}They are unknown level logs."
-printf "%s\n" "${tut}Unknown level logs will not be filtered by log level, so they will still pass if logs are enabled or with \"f\"orce..."
-printf "%s\n" "${tut}Let us see how it goes$_res"
+test='printf "%s" "This is streamed to stdout only as logs are disabled. Thus, you see it once." | shouts 42'
+expected="This is streamed to stdout only as logs are disabled. Thus, you see it once."
+run "$test" "$expected"
 
 printf "%s\n" "% SHOUT_DISABLED=\"\" SHOUT_LEVEL=5"
 SHOUT_DISABLED="" SHOUT_LEVEL=5
@@ -124,22 +121,15 @@ test='shout 5 This is a level 5 log, it can pass!'
 expected="${gry}This is a level 5 log, it can pass!$res"
 run "$test" "$expected"
 
-test='shout 4 This is a level 4 log, it cannot display!'
+test='shout 4 This is a level 4 log, it cannot display, just like for shouta and shouts!'
 expected=
 run "$test" "$expected"
 
-test='shout f Now the terrible truth:\
+test='shoutf Now the terrible truth:\
  multiline strings will end up on one line.'
 expected=$(
   printf '%s' "${gry}Now the terrible truth: multiline strings will end up on one line.$res"
 )
-run "$test" "$expected"
-
-printf "%s\n" "% SHOUT_KNOWN_LEVEL_ONLY=1"
-SHOUT_KNOWN_LEVEL_ONLY=1
-
-test='shout "" This is an unknown level log, it cannot pass anymore!'
-expected=
 run "$test" "$expected"
 
 printf '%s\n' "${tut}Here! Have a rainbow with the \"r\" switch!$_res"
