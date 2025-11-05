@@ -9,6 +9,25 @@ first install `shoutctl`. Then see the [How to Use](#how-to-use) and [Examples](
 ```sh
 % ./install.sh # installs shoutctl
 % shoutctl     # will display all you need to know to start
+Description:
+  shoutctl - a little helper to interact with shout and source the libs easily.
+
+Usage:
+
+\`\`\`sh                              # Admire the fake terminal theme!
+% eval $(shoutctl source)             # Source and that's it! You can shout! (see shoutctl help for details)
+% eval $(shoutctl source 2>/dev/null) # Same but silent.
+% shoutctl [COMMAND]                  # See other commands!
+\`\`\`                                # Look into ./shoutctl.sh to see how it's done!
+
+COMMAND:
+  help                Print help for THE ACTUAL libshout.
+  source              Print the command to source libshout.
+  test                Run the tests.
+  bench BENCH_METHOD  Run a bench test
+  rainbow             Print an indexed rainbow of 256 colors. (no worries. it's compact)
+  [Pp]alestine        Print the Palestinian flag.
+  [*]                 Print this message.
 ```
 
 ## How to Use
@@ -33,52 +52,45 @@ The following will explain what the `OPT_STRING` is and which values it takes.
     ,                                 :         :
                          v0.1.0
 
-Multi-modal logger with switches log level in a single OPT_STRING.
+Multi-modal printf-speed logger with switches log level in a single OPT_STRING.
 
 Philosophy:
   - No background process
   - No runtime    # shout is part of your shell process
   - No subprocess # no '|' no '&' no '$(whatever)'
+  - No bashism    # POSIX syntax
+  - No smart options # static optimization.
 
 Usage:
-  shout OPT_STRING [ARGUMENT...] # line mode
-  command | shout OPT_STRING     # stream mode
+  shout[as]f [ARGUMENT...]       # force log
+  shout LOG_LEVEL [ARGUMENT...]  # line mode
+  shouta LOG_LEVEL [ARGUMENT...] # args mode
+  COMMAND | shouts LOG_LEVEL     # stream mode
 
 Environments:
   # Log levels.
-  SHOUT_DISABLED           global logging switch. Can be bypassed with f opt.
   SHOUT_LEVEL              the minimal log level accepted. Can be bypassed with f opt.
-  SHOUT_KNOWN_LEVEL_ONLY   discards logs with no level. Can be bypassed with f opt.
+  SHOUT_DISABLED           global logging switch. Can be bypassed with f opt.
   # Default colors. All grey. Set them to null to use your regular text color.
   SHOUT_COLOR              default color is always appended, provided or not.
   SHOUT_ARGS_COLOR         default args listing color.
   SHOUT_STREAM_COLOR       default stream color.
 
-OPT_STRING: '[LOG_LEVEL][SWITCH...]' # see predefined colors at the bottom
-
-SWITCH: # combinable
-  a: pretty print positional arguments.
-  f: force print to stderr (i.e. bypass SHOUT_DISABLED)
-
-LOG_LEVEL: # single number
-  > 0 integer indicating the criticity of your log. It is the first number found in your OPT_STRING.
-
-Supported log modes:
-  - line-mode:      prints "$@" to stderr after shifting the optstring.
-  - stream-mode:    forwards stdin to stdout and tees a colorized copy to stderr.
+LOG_LEVEL:
+  Only logs lower or equal to SHOUT_LEVEL will display. (unless forced)
 
 Examples:
   # see much more examples by running the tests with `shoutctl test`
   # This prints a red log (and resets colors) in red to stderr even if SHOUT_DISABLED is set.
-  shout f "${_red}The pizza is blue."
-  # This prints in grey to stderr (and resets colors) if SHOUT_LEVEL <= 5 and forwards to myNextProcess
-  echo "streamed text" | shout 5 | myNextProcess
+  shoutf "${_red}The pizza is blue."
+  # This prints in grey to stderr (and resets colors) if SHOUT_LEVEL >= 5 and forwards to myNextProcess
+  echo "streamed text" | shouts 5 | myNextProcess
 
 Included colors: (you can define and pass your own...)
-foregrounds:  $_gry  $_red  $_grn  $_yel  $_blu  $_mag  $_cya  $_whi  $_def  $_bla
-backgrounds:  $_GRY  $_RED  $_GRN  $_YEL  $_BLU  $_MAG  $_CYA  $_WHI  $_DEF  $_BLA
-modifiers:    $_rev  $_REV  $_bol # reverse, noreverse, bold
-finally:      $_res # resets everything.
+foregrounds:  ${_gry}  ${_red}  ${_grn}  ${_yel}  ${_blu}  ${_mag}  ${_cya}  ${_whi}  ${_def}  ${_bla}
+backgrounds:  ${_GRY}  ${_RED}  ${_GRN}  ${_YEL}  ${_BLU}  ${_MAG}  ${_CYA}  ${_WHI}  ${_DEF}  ${_BLA}
+modifiers:    ${_rev}  ${_REV}  ${_bol} # reverse, noreverse, bold
+finally:      ${_res} # resets everything
 ```
 
 ## Examples - To Be Run in Your Own Terminal for Colors
@@ -89,74 +101,67 @@ on your terminal's theme.
 So you can just run them (~instant):
 
 ```sh
-% shout "" "This is a default grey log. Notice the empty OPT_STRING."
-This is a default grey log. Notice the empty OPT_STRING.
+% shoutctl test
+# then the following will display, you don't type it.
+% shout 0 "This is a default grey log. $_CYA${_bla}Notice$_res$_gry 0 is the (most critical) log level, which is mandatory with simple shout."
+This is a default grey log. Notice 0 is the (most critical) log level, which is mandatory with simple shout.
 Test passed!
 
-Important! always pass the OPT_STRING to avoid your first arg to be mistaken with it.
 % SHOUT_COLOR=$_red # Let's define the default color to red.
-% shout "" "${_red}This is a red line log.$_grn You$_yel can$_blu change$_mag the$_cya color$_whi by$_def inserting your own escape sequences. They will be preserved."
+% shoutf "${_red}This is a red line log.$_grn You$_yel can$_blu change$_mag the$_cya color$_whi by$_def inserting your own escape sequences. They will be preserved."
 This is a red line log. You can change the color by inserting your own escape sequences. They will be preserved.
 Test passed!
 
 % SHOUT_COLOR= # You can also opt out of default color by setting it to null. Unsetting it would activate back the default fallback!
-% shout "" "This is printed in regular color :'("
+% shoutf "This is printed in regular color :'("
 This is printed in regular color :'(
 Test passed!
 
 % SHOUT_COLOR=$_gry
-% shout "" "This is printed in grey :)"
+% shoutf "This is printed in grey :)"
 This is printed in grey :)
 Test passed!
 
 % SHOUT_DISABLED=1
-% shout "f" "${_red}The \"f\"orce switch bypasses SHOUT_DISABLED. Switches go before any color."
-The "f"orce switch bypasses SHOUT_DISABLED. Switches go before any color.
+% shout 1 "${_yel}SHOUT_DISABLED$_gry applies to leveled shout. Not shout?f."
+
 Test passed!
 
-% shout fa This is a positional arg log using the \"a\" switch.
+% shoutaf This is a positional arg log.
 $1: This
 $2: is
 $3: a
 $4: positional
 $5: arg
-$6: log
-$7: using
-$8: the
-$9: "a"
-$10: switch.
+$6: log.
+Test passed!
+
+% shouta needs a level as well, but it will not show anyway while SHOUT_DISABLED=1
+
 Test passed!
 
 % SHOUT_STREAM_COLOR=$_RED$_bla # there is a stream color defaulting to SHOUT_COLOR that you can utilize.
-% printf "%s" "This is streamed to stdout and stderr. Thus, you see it twice." | shout f
-This is streamed to stdout and stderr. Thus, you see it twice.This is streamed to stdout and stderr. Thus, you see it twice.
+% printf "%s" "This is streamed and forced to stdout and stderr. Thus, you see it twice." | shoutsf
+This is streamed and forced to stdout and stderr. Thus, you see it twice.This is streamed and forced to stdout and stderr. Thus, you see it twice.
 Test passed!
 
-% printf "%s" "This is streamed to stdout only. Thus, you see it once." | shout
-This is streamed to stdout only. Thus, you see it once.
+% SHOUT_DISABLED="" SHOUT_LEVEL=5
+% printf "%s" "This is streamed to stdout only as logs are disabled. Thus, you see it once." | shouts 42
+This is streamed to stdout only as logs are disabled. Thus, you see it once.
 Test passed!
 
-Did you notice logs did not have a level in previous tests?
-They are unknown level logs.
-Unknown level logs will not be filtered by log level, so they will still pass if logs are enabled or with "f"orce...
-Let us see how it goes
 % SHOUT_DISABLED="" SHOUT_LEVEL=5
 % shout 5 This is a level 5 log, it can pass!
 This is a level 5 log, it can pass!
 Test passed!
 
-% shout 4 This is a level 4 log, it cannot display!
+% shout 6 This is a level 6 log, it cannot display, just like for shouta and shouts!
 
 Test passed!
 
-% shout f Now the terrible truth:\
+% shoutf Now the terrible truth:\
  multiline strings will end up on one line.
 Now the terrible truth: multiline strings will end up on one line.
-Test passed!
-
-% SHOUT_KNOWN_LEVEL_ONLY=1
-% shout "" This is an unknown level log, it cannot pass anymore!
-
 Test passed!
 
 Here! Have a rainbow with the "r" switch!

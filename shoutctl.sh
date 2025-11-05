@@ -41,19 +41,19 @@ ${_mag}Description${_res}:
 ${_mag}Usage${_res}:
 
 ${_BLA}${_mag}\`\`\`${_yel}sh${_grn}                                 ${_res}${_gry}# Admire the fake terminal theme!
-${_BLA}${_grn}% eval \$(shoutctl source)             ${_res}${_gry}# Source and that's it! You can shout! (see shoutctl help for details)${_grn}
-${_BLA}% eval \$(shoutctl source 2>/dev/null) ${_res}${_gry}# Same but silent.${_grn}
-${_BLA}% shoutctl [COMMAND]                  ${_res}${_gry}# See other commands!
+${_BLA}${_grn}% eval \$(shoutctl source)             ${_res}${_gry}# Source and that's it! You can shout! (see shoutctl help for details)
+${_BLA}${_grn}% eval \$(shoutctl source 2>/dev/null) ${_res}${_gry}# Same but silent.
+${_BLA}${_grn}% shoutctl [COMMAND]                  ${_res}${_gry}# See other commands!
 ${_BLA}${_mag}\`\`\`                                   ${_res}${_gry}# Look into ${_yel}./shoutctl.sh${_gry} to see how it's done!${_res}
 
 ${_mag}COMMAND${_res}:
-  ${_yel}[Pp]alestine${_res}      Print the Palestinian flag.
-  ${_yel}help${_res}              Print help for ${_RED}${_def}${_bol} THE ACTUAL ${_res} libshout.
-  ${_yel}source${_res}            Print the command to source libshout.
-  ${_yel}test${_res}              Run the tests.
-  ${_yel}bench BENCH_METHOD${_res}Run a bench test
-  ${_yel}rainbow${_res}           Print an indexed rainbow of 256 colors. (no worries. it's compact)
-  ${_yel}[*]${_res}               Print this message.
+  ${_yel}help${_res}                Print help for ${_RED}${_def}${_bol} THE ACTUAL ${_res} libshout.
+  ${_yel}source${_res}              Print the command to source libshout.
+  ${_yel}test${_res}                Run the tests.
+  ${_yel}bench BENCH_METHOD${_res}  Run a bench test
+  ${_yel}rainbow${_res}             Print an indexed rainbow of 256 colors. (no worries. it's compact)
+  ${_yel}[Pp]alestine${_res}        Print the Palestinian flag.
+  ${_yel}[*]${_res}                 Print this message.
 EOF
   ;;
 esac
