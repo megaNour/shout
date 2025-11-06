@@ -9,7 +9,7 @@ shout() { # inline logging
 shouta() { # "a"rguments indexed
   _shout_level=${1:?shouta requires a log level. Use shoutaf to force.}
   shift
-  _shoutCheckLevel && shouta "$@" || :
+  _shoutCheckLevel && shoutaf "$@" || :
 }
 
 shouts() { # "s"tream logging
