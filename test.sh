@@ -57,22 +57,28 @@ test='shout 0 "This is a default grey log. $_CYA${_bla}Notice$_res$_gry 0 is the
 expected=$(printf "%s" "${gry}This is a default grey log. $CYA${bla}Notice$res$gry 0 is the (most critical) log level, which is mandatory with simple shout.$_res")
 run "$test" "$expected"
 
-printf '%s\n' "% SHOUT_COLOR=\$_red $tut# Let's define the default color to red.$_res"
-SHOUT_COLOR=$_red
-
 test='shoutf "${_red}This is a red line log.$_grn You$_yel can$_blu change$_mag the$_cya color$_whi by$_def inserting your own escape sequences. They will be preserved."'
-expected=$(printf "%s" "$red${red}This is a red line log.$grn You$yel can$blu change$mag the$cya color$whi by$def inserting your own escape sequences. They will be preserved.$res")
+expected=$(printf "%s" "$gry${red}This is a red line log.$grn You$yel can$blu change$mag the$cya color$whi by$def inserting your own escape sequences. They will be preserved.$res")
 run "$test" "$expected"
 
-printf '%s\n' "% SHOUT_COLOR= $tut# You can also opt out of default color by setting it to null. Unsetting it would activate back the default fallback!$res"
-SHOUT_COLOR=
+printf '%s\n' "% SHOUT_COLOR=\$_red $tut# Let's define the default color to red.$_res"
+SHOUT_COLOR=$_red
+printf '%s\n' "% eval \$(shoutctl source 2>/dev/null) $tut# shout is precompiled to be more efficient. We need to source it again.$_res"
+eval $(shoutctl source 2>/dev/null)
+
+printf '%s\n' "% SHOUT_COLOR=\$_def eval \$(shoutctl source) $tut# You can also opt out of default color by setting it to default. Unsetting it would activate back the default fallback!$res"
+SHOUT_COLOR=$_def
+printf '%s\n' "% eval \$(shoutctl source 2>/dev/null) $tut# don't forget to refresh$_res"
+eval $(shoutctl source 2>/dev/null)
 
 test='shoutf "This is printed in regular color :'\''("'
-expected=$(printf "%s" "This is printed in regular color :'($res")
+expected=$(printf "%s" "${def}This is printed in regular color :'($res")
 run "$test" "$expected"
 
 printf '%s\n' "% SHOUT_COLOR=\$_gry"
 SHOUT_COLOR=$_gry
+printf '%s\n' "% eval \$(shoutctl source 2>/dev/null) $tut# I bet you forgot to refresh...$_res"
+eval $(shoutctl source 2>/dev/null)
 
 test='shoutf "This is printed in grey :)"'
 expected=$(printf "%s" "${gry}This is printed in grey :)$res")
@@ -97,9 +103,11 @@ run "$test" "$expected"
 test='shouta 0 needs a level as well, but it will not show anyway while SHOUT_DISABLED=1'
 expected=
 run "$test" "$expected"
-printf '%s\n' "% SHOUT_STREAM_COLOR=\$_RED\$_bla ${tut}# there is a stream color defaulting to ${yel}SHOUT_COLOR$tut that you can utilize.$res"
 
+printf '%s\n' "% SHOUT_STREAM_COLOR=\$_RED\$_bla ${tut}# there is a stream color defaulting to ${yel}SHOUT_COLOR$tut that you can utilize.$res"
 SHOUT_STREAM_COLOR=$_RED$_bla
+printf '%s\n' "% eval \$(shoutctl source 2>/dev/null) $tut# I know I know, you wanted to tell me to refresh...$_res"
+eval $(shoutctl source 2>/dev/null)
 
 test='printf "%s" "This is streamed and forced to stdout and stderr. Thus, you see it twice." | shoutsf'
 expected="$RED${bla}This is streamed and forced to stdout and stderr. Thus, you see it twice.This is streamed and forced to stdout and stderr. Thus, you see it twice.$res"

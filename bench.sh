@@ -20,6 +20,14 @@ _shout_bench_shoutf() {
   shoutf "This is a grey log. Log arguments inline in grey."
 }
 
+_shout_bench_expand() {
+  : "$SHOUT_STREAM_COLOR" "$SHOUT_STREAM_COLOR" "$_res"
+}
+
+_shout_bench_hardcode() {
+  : "[38;5;8m" "[38;5;8m" "[38;5;8m"
+}
+
 _shout_bench_printfg() {
   _shout_level=${1:?shout requires a log level. Use shoutf to force.}
   [ -n "$SHOUT_DISABLED" ] && return 0
