@@ -96,7 +96,7 @@ $gry\$5: arg$res
 $gry\$6: log.$res"
 run "$test" "$expected"
 
-test='shouta needs a level as well, but it will not show anyway while SHOUT_DISABLED=1'
+test='shouta 0 needs a level as well, but it will not show anyway while SHOUT_DISABLED=1'
 expected=
 run "$test" "$expected"
 printf '%s\n' "% SHOUT_STREAM_COLOR=\$_RED\$_bla ${tut}# there is a stream color defaulting to ${yel}SHOUT_COLOR$tut that you can utilize.$res"
