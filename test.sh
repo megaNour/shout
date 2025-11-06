@@ -2,9 +2,7 @@
 
 set -e
 
-ENTRY=$(dirname "$0")
-. "$ENTRY/colors.sh"
-. "$ENTRY/libshout.sh"
+eval $(shoutctl source)
 
 res="[0m"
 red="[38;5;1m"

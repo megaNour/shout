@@ -22,7 +22,7 @@ shout() { # inline logging
   _shout_level=${1:?shout requires a log level. Use shoutf to force.}
   [ -n "$SHOUT_DISABLED" ] && return 0
   [ "$((SHOUT_LEVEL - _shout_level))" -ge 0 ] && shift || return 0
-  printf "%s%s%s\n" "$SHOUT_COLOR" "$*" "$_res" >&2
+  ##! shoutf content inlines here
 }
 
 shouta() { # "a"rguments indexed
@@ -30,18 +30,12 @@ shouta() { # "a"rguments indexed
   [ -n "$SHOUT_DISABLED" ] && return 0
   [ "$((SHOUT_LEVEL - _shout_level))" -ge 0 ] && shift || return 0
   _shout_arg_i=0
-  _shout_arg_i=0
-  for arg in "$@"; do
-    _shout_arg_i=$((_shout_arg_i + 1))
-    printf '%s%s%s\n' "$SHOUT_ARGS_COLOR" "\$$_shout_arg_i: $arg" "$_res" >&2
-  done
+  ##! shoutaf content inlines here
 }
 
 shouts() { # "s"tream logging
   _shout_level=${1:?shouts requires a log level. Use shoutsf to force.}
   [ -n "$SHOUT_DISABLED" ] && cat && return 0
   [ "$((SHOUT_LEVEL - _shout_level))" -ge 0 ] || cat && return 0
-  printf '%s' "$SHOUT_STREAM_COLOR" >&2
-  tee /dev/stderr
-  printf '%s' "$_res" >&2
+  ##! shoutsf content inlines here
 }
