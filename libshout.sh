@@ -2,14 +2,12 @@
 
 shout() { # inline logging
   _shout_level=${1:?shout requires a log level. Use shoutf to force.}
-  shift
-  _shoutCheckLevel && shoutf "$*" || :
+  _shoutCheckLevel && shift && shoutf "$*" || :
 }
 
 shouta() { # "a"rguments indexed
   _shout_level=${1:?shouta requires a log level. Use shoutaf to force.}
-  shift
-  _shoutCheckLevel && shoutaf "$@" || :
+  _shoutCheckLevel && shift && shoutaf "$@" || :
 }
 
 shouts() { # "s"tream logging
