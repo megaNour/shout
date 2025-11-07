@@ -6,7 +6,7 @@ NAME=shoutctl
 
 install_dir=${1:-$HOME/.local/bin}
 target="$install_dir/$NAME"
-entry=$(dirname "$0")
+entry=$(CDPATH="" cd -- "$(dirname "$0")" && pwd)
 
 mkdir -p "$install_dir"
 
@@ -15,7 +15,7 @@ cat <<EOF >"$target"
 
 set -e
 
-ENTRY=$entry
+export ENTRY=$entry
 EOF
 
 tail -n +2 "$entry/shoutctl.sh" >>"$target"

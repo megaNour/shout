@@ -29,4 +29,4 @@ rec=="level" { level = level $0 ORS; next }
 /##! level/ { sub(/\n$/, "", level );print level ; next }
 
 !/^[[:space:]]*$/ {print}
-' <./skaffold.sh >./libshout.sh
+' <"$ENTRY/skaffold.sh" >"$ENTRY/libshout.sh"
