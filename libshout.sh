@@ -16,13 +16,13 @@ shoutsf() { # "f"orce "s"tream logging
 }
 shout() { # inline logging
   [ -n "$SHOUT_DISABLED" ] && return 0
-  _shout_level=${1:?shout requires a log level. Use shoutf to force.}
+  _shout_level=$1
   [ "$((SHOUT_LEVEL - _shout_level))" -ge 0 ] && shift || return 0
   printf "%s%s%s\n" "[38;5;8m" "$*" "[0m" >&2
 }
 shouta() { # "a"rguments indexed
   [ -n "$SHOUT_DISABLED" ] && return 0
-  _shout_level=${1:?shout requires a log level. Use shoutf to force.}
+  _shout_level=$1
   [ "$((SHOUT_LEVEL - _shout_level))" -ge 0 ] && shift || return 0
   _shout_arg_i=0
   for arg in "$@"; do
@@ -32,7 +32,7 @@ shouta() { # "a"rguments indexed
 }
 shouts() { # "s"tream logging
   [ -n "$SHOUT_DISABLED" ] && cat && return 0
-  _shout_level=${1:?shout requires a log level. Use shoutf to force.}
+  _shout_level=$1
   [ "$((SHOUT_LEVEL - _shout_level))" -ge 0 ] || cat && return 0
   printf '%s' "[38;5;8m" >&2
   tee /dev/stderr
