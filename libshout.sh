@@ -6,7 +6,7 @@ shoutaf() { # "f"orce "a"rguments indexing
   _shout_arg_i=0
   for arg in "$@"; do
     _shout_arg_i=$((_shout_arg_i + 1))
-    printf '%s%s%s\n' "[38;5;8m" "\$$_shout_arg_i: $arg" "[0m" >&2
+    printf '%s%s%s\n' "" "\$$_shout_arg_i: $arg" "[0m" >&2
   done
 }
 shoutsf() { # "f"orce "s"tream logging
@@ -27,7 +27,7 @@ shouta() { # "a"rguments indexed
   _shout_arg_i=0
   for arg in "$@"; do
     _shout_arg_i=$((_shout_arg_i + 1))
-    printf '%s%s%s\n' "[38;5;8m" "\$$_shout_arg_i: $arg" "[0m" >&2
+    printf '%s%s%s\n' "" "\$$_shout_arg_i: $arg" "[0m" >&2
   done
 }
 shouts() { # "s"tream logging

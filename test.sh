@@ -2,7 +2,22 @@
 
 set -e
 
-eval $(shoutctl source)
+# reinit
+
+OLD_SHOUT_COLOR=$SHOUT_COLOR
+OLD_SHOUTARGS_COLOR=$SHOUTARGS_COLOR
+OLD_SHOUT_STREAM_COLOR=$SHOUT_STREAM_COLOR
+
+cleanup() {
+  SHOUT_COLOR=${OLD_SHOUT_COLOR}
+  SHOUT_ARGS_COLOR=$OLD_SHOUT_ARGS_COLOR
+  SHOUT_STREAM_COLOR=$OLD_SHOUT_STREAM_COLOR
+  eval "$(shoutctl source 2>/dev/null)"
+}
+
+trap 'cleanup' EXIT TERM INT QUIT
+
+# init
 
 res="[0m"
 red="[38;5;1m"
@@ -53,6 +68,10 @@ run() {
   unset test expected actual
 }
 
+# start testing
+
+eval $(shoutctl source 2>/dev/null)
+
 test='shout 0 "This is a default grey log. $_CYA${_bla}Notice$_res$_gry 0 is the (most critical) log level, which is mandatory with simple shout."'
 expected=$(printf "%s" "${gry}This is a default grey log. $CYA${bla}Notice$res$gry 0 is the (most critical) log level, which is mandatory with simple shout.$_res")
 run "$test" "$expected"
@@ -66,13 +85,18 @@ SHOUT_COLOR=$_red
 printf '%s\n' "% eval \$(shoutctl source 2>/dev/null) $tut# shout is precompiled to be more efficient. We need to source it again.$_res"
 eval $(shoutctl source 2>/dev/null)
 
-printf '%s\n' "% SHOUT_COLOR=\$_def eval \$(shoutctl source) $tut# You can also opt out of default color by setting it to default. Unsetting it would activate back the default fallback!$res"
-SHOUT_COLOR=$_def
+test='shoutf "This is a default red line log."'
+expected=$(printf "%s" "${red}This is a default red line log.$res")
+run "$test" "$expected"
+
+printf '%s\n' "% SHOUT_COLOR= \$(shoutctl source) $tut# You can also opt out of default color by setting it to null!$res"
+SHOUT_COLOR=
 printf '%s\n' "% eval \$(shoutctl source 2>/dev/null) $tut# don't forget to refresh$_res"
 eval $(shoutctl source 2>/dev/null)
+printf '%s\n' "$bol${yel}Yes,$res$tut I know you can \"${grn}eval '\$(SHOUT_COLOR=\$_foo shoutctl source 2>/dev/null)'$tut\". But I wanted to make the env setting easy to spot." "${yel}On the opposite,$tut this will not work: \"${red}SHOUT_COLOR=\$_foo eval '\$(shoutctl source)'$tut\". The subshell will expand before the env is ever set up."
 
 test='shoutf "This is printed in regular color :'\''("'
-expected=$(printf "%s" "${def}This is printed in regular color :'($res")
+expected=$(printf "%s" "This is printed in regular color :'($res")
 run "$test" "$expected"
 
 printf '%s\n' "% SHOUT_COLOR=\$_gry"
