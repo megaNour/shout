@@ -19,7 +19,7 @@ case "$1" in
   . "$ENTRY/$COLORS"
   build
   printf '%s\n' "${_gry}eval the whole output of this command: ${_yel}'eval \$(shoutctl source 2>/dev/null)'${_gry}. These grey lines will not be sourced as they go to stderr.${_res}" >&2
-  printf '. %s; . %s' "$ENTRY/$COLORS" "$ENTRY/$EXE"
+  printf '. %s; ' "$ENTRY/$COLORS" "$ENTRY/$EXE"
   ;;
 "${TEST%.sh}")
   "$ENTRY/$TEST"

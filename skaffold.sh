@@ -12,30 +12,38 @@ shoutaf() { # "f"orce "a"rguments indexing
   done
 }
 
-shoutsf() { # "f"orce "s"
+shoutsf() { # "f"orce "s"tream logging
   printf '%s' "$SHOUT_STREAM_COLOR" >&2
   tee /dev/stderr
   printf '%s' "$_res" >&2
 }
 
-shout() { # inline logging
-  _shout_level=${1:?shout requires a log level. Use shoutf to force.}
+early() {
   [ -n "$SHOUT_DISABLED" ] && return 0
+  _shout_level=${1:?shout requires a log level. Use shoutf to force.}
+}
+
+level() {
   [ "$((SHOUT_LEVEL - _shout_level))" -ge 0 ] && shift || return 0
-  ##! shoutf content inlines here
+}
+
+shout() { # inline logging
+  :
+  ##! early
+  ##! level
+  ##! shoutf
 }
 
 shouta() { # "a"rguments indexed
-  _shout_level=${1:?shouta requires a log level. Use shoutaf to force.}
-  [ -n "$SHOUT_DISABLED" ] && return 0
-  [ "$((SHOUT_LEVEL - _shout_level))" -ge 0 ] && shift || return 0
-  _shout_arg_i=0
-  ##! shoutaf content inlines here
+  :
+  ##! early
+  ##! level
+  ##! shoutaf
 }
 
 shouts() { # "s"tream logging
-  _shout_level=${1:?shouts requires a log level. Use shoutsf to force.}
   [ -n "$SHOUT_DISABLED" ] && cat && return 0
+  _shout_level=${1:?shout requires a log level. Use shoutf to force.}
   [ "$((SHOUT_LEVEL - _shout_level))" -ge 0 ] || cat && return 0
-  ##! shoutsf content inlines here
+  ##! shoutsf
 }
