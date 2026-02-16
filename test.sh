@@ -108,8 +108,8 @@ test='shoutf "This is printed in grey :)"'
 expected=$(printf "%s" "${gry}This is printed in grey :)$res")
 run "$test" "$expected"
 
-printf '%s\n' "% SHOUT_DISABLED=1"
-SHOUT_DISABLED=1
+printf '%s\n' "% unset SHOUT_LEVEL"
+unset SHOUT_LEVEL
 
 test='shout 1 "${_yel}SHOUT_DISABLED$_gry applies to leveled shout. Not shout?f."'
 expected=
@@ -137,15 +137,15 @@ test='printf "%s" "This is streamed and forced to stdout and stderr. Thus, you s
 expected="$RED${bla}This is streamed and forced to stdout and stderr. Thus, you see it twice.This is streamed and forced to stdout and stderr. Thus, you see it twice.$res"
 run "$test" "$expected"
 
-printf "%s\n" "% SHOUT_DISABLED=\"\" SHOUT_LEVEL=5"
-SHOUT_DISABLED=1
+printf "%s\n" "% unset SHOUT_LEVEL"
+unset SHOUT_LEVEL
 
 test='printf "%s" "This is streamed to stdout only as logs are disabled. Thus, you see it once." | shouts 42'
 expected="This is streamed to stdout only as logs are disabled. Thus, you see it once."
 run "$test" "$expected"
 
-printf "%s\n" "% SHOUT_DISABLED=\"\" SHOUT_LEVEL=5"
-SHOUT_DISABLED="" SHOUT_LEVEL=5
+printf "%s\n" "% SHOUT_LEVEL=5"
+SHOUT_LEVEL=5
 
 test='shout 5 This is a level 5 log, it can pass!'
 expected="${gry}This is a level 5 log, it can pass!$res"

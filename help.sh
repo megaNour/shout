@@ -35,7 +35,7 @@ ${_mag}Usage:${_res}
 ${_mag}Environments:${_res}
   ${_gry}# Log levels.
   ${_yel}SHOUT_LEVEL${_res}              the minimal log level accepted. Can be bypassed with ${_yel}f${_res} opt.
-  ${_yel}SHOUT_DISABLED${_res}           global logging switch. Can be bypassed with ${_yel}f${_res} opt.
+                                         If unset, logs are disabled.
   ${_gry}# Default colors. All grey. Set them to null to use your regular text color.
   ${_yel}SHOUT_COLOR${_res}              default color is always appended, provided or not.
   ${_yel}SHOUT_ARGS_COLOR${_res}         default args listing color.

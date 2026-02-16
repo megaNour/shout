@@ -19,8 +19,8 @@ shoutsf() { # "f"orce "s"tream logging
 }
 
 early() {
-  [ -n "$SHOUT_DISABLED" ] && return 0
-  _shout_level=$1
+  [ -z "$SHOUT_LEVEL" ] && return 0
+  _shout_level=${1-0}
 }
 
 level() {
@@ -42,7 +42,7 @@ shouta() { # "a"rguments indexed
 }
 
 shouts() { # "s"tream logging
-  [ -n "$SHOUT_DISABLED" ] && cat && return 0
+  [ -z "$SHOUT_LEVEL" ] && cat && return 0
   _shout_level=$1
   [ "$((SHOUT_LEVEL - _shout_level))" -ge 0 ] || cat && return 0
   ##! shoutsf
